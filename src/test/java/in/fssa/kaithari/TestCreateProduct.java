@@ -18,9 +18,9 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		
 		Product product = new Product();
-		product.setName("Kaavi Dhoti");
-		product.setDescription("Given an array of n");
+		product.setName("Color Dhoti");
 		product.setCategory_id(2);
+		product.setDescription("Given an array of n");
 		product.setPrice(3000);
 		assertDoesNotThrow(() ->{
 			productService.createProduct(product);

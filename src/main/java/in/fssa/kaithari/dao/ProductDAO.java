@@ -25,18 +25,20 @@ public class ProductDAO implements ProductInterface {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
-			String query = "INSERT INTO products (name,category_id, description,price,) VALUES (?,?,?,?)";
+			String query = "INSERT INTO products (product_name, category_id, description, price) VALUES (?,?,?,?)";
 			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query);  
 			ps.setString(1,product.getName());
 			ps.setInt(2, product.getCategory_id());
 			ps.setString(3, product.getDescription());
 			ps.setInt(4, product.getPrice());
 			
 			int rowCreated = ps.executeUpdate();
+			
 			if(rowCreated > 0) {				
 			System.out.println("Product created Successfully");
 			}
+			
 			else {
 			throw new RuntimeException("Product Creation fails");
 			}
