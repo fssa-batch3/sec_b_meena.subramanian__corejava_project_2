@@ -18,8 +18,8 @@ public class TestCreateProduct {
 		ProductService productService = new ProductService();
 		
 		Product product = new Product();
-		product.setName("Color Dhoti");
-		product.setCategory_id(2);
+		product.setName("orange Dhoti");
+		product.setCategory_id(3);
 		product.setDescription("Given an array of n");
 		product.setPrice(3000);
 		assertDoesNotThrow(() ->{

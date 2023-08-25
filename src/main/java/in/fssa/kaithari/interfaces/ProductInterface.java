@@ -8,7 +8,7 @@ public interface ProductInterface extends ProductBase<Product> {
 
 	public abstract Set<Product> listAllProducts();
 
-	public abstract Set<Product> listallProductsByCategoryId(int category_id);
+	public abstract Set<Product> listAllProductsByCategoryId(int category_id);
 
 
 }

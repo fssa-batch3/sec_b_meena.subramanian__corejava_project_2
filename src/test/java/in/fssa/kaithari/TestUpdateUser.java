@@ -21,6 +21,5 @@ import in.fssa.kaithari.service.UserService;
 		assertDoesNotThrow(() ->{
 			userService.updateName(updateUser.getId(),updateUser.getName());
 		});
-	}
-	
+	}	
 }

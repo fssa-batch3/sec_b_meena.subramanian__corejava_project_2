@@ -170,7 +170,7 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> allProducts = new HashSet<>(); 
 		
 		try {
-			String query = "SELECT * FROM products";
+			String query = "SELECT product_name,id,category_id,description,price FROM products";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -178,7 +178,7 @@ public class ProductDAO implements ProductInterface {
 			while(rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
+				product.setName(rs.getString("product_name"));
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));			
@@ -203,7 +203,7 @@ public class ProductDAO implements ProductInterface {
 	 * @throws 
 	 */
 	@Override
-	public Set<Product> listallProductsByCategoryId(int category_id) {
+	public Set<Product> listAllProductsByCategoryId(int category_id) {
 		
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -212,7 +212,7 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> listOfProductsByCategoryId = new HashSet<>(); 
 		
 		try {
-			String query = "SELECT * FROM products WHERE category_id = ?";
+			String query = "SELECT category_id FROM products WHERE category_id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1,category_id);
@@ -221,7 +221,7 @@ public class ProductDAO implements ProductInterface {
 			while(rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
+				product.setName(rs.getString("product_name"));
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));	

@@ -2,10 +2,10 @@ package in.fssa.kaithari.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+//import java.util.HashSet;
+//import java.util.Set;
 
 import in.fssa.kaithari.interfaces.UserInterface;
 import in.fssa.kaithari.model.User;
@@ -26,7 +26,7 @@ public class UserDAO implements UserInterface {
 		PreparedStatement ps = null;
 		
 		try {
-			String query = "INSERT INTO users (name,email,password,mobile_number)values(?,?,?,?)";
+			String query = "INSERT INTO users (name,email,password)values(?,?,?,?)";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, newuser.getName());

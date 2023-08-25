@@ -15,9 +15,9 @@ public class CategoryService {
 
 		CategoryValidator.validateCategory(newcategory);
 
-		CategoryDAO categoryDao = new CategoryDAO();
+		CategoryDAO categoryDAO = new CategoryDAO();
 
-		categoryDao.create(newcategory);
+		categoryDAO.create(newcategory);
 	}
 
 	/**
@@ -29,9 +29,9 @@ public class CategoryService {
 
 		CategoryValidator.validateId(categoryId);
 
-		CategoryDAO categoryDao = new CategoryDAO();
+		CategoryDAO categoryDAO = new CategoryDAO();
 
-		categoryDao.delete(categoryId);
+		categoryDAO.delete(categoryId);
 	}
 
 	/**
@@ -45,8 +45,8 @@ public class CategoryService {
 		
 		CategoryValidator.validateId(id);
 		CategoryValidator.validateName(newCategoryName);
-		CategoryDAO categoryDao = new CategoryDAO();
-		categoryDao.updateName(id, newCategoryName);
+		CategoryDAO categoryDAO = new CategoryDAO();
+		categoryDAO.updateName(id, newCategoryName);
 
 	}
 

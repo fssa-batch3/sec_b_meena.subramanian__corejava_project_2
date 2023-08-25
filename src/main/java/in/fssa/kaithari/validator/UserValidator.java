@@ -56,7 +56,7 @@ public class UserValidator {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT * FROM users WHERE is_active=1 AND id = ?";
+			String query = "SELECT id FROM users WHERE is_active=1 AND id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
@@ -114,7 +114,7 @@ public class UserValidator {
 
 		try {
 
-			String query = "SELECT * FROM users WHERE is_active=1 AND email=?";
+			String query = "SELECT email FROM users WHERE is_active=1 AND email=?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, email);

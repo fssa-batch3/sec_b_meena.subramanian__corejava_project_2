@@ -32,7 +32,7 @@ public class CategoryValidator {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "SELECT * FROM categories WHERE name = ?";
+			String query = "SELECT name FROM categories WHERE name = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, category.getName());
@@ -91,7 +91,7 @@ public class CategoryValidator {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "SELECT * FROM categories WHERE id = ?";
+			String query = "SELECT id FROM categories WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, categoryId);

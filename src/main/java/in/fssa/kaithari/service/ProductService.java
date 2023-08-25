@@ -33,7 +33,7 @@ public class ProductService {
 		validator.validateCategoryId(category_id);
 
 		ProductDAO productDAO = new ProductDAO();
-		Set<Product> products = productDAO.listallProductsByCategoryId(category_id);
+		Set<Product> products = productDAO.listAllProductsByCategoryId(category_id);
 
 		return products;
 	}

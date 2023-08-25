@@ -17,7 +17,7 @@ public class TestCreateCategory {
 		CategoryService categoryService = new CategoryService();
 
 		Category newCategory = new Category();
-		newCategory.setName("Chudithar");
+		newCategory.setName("Chuditharsse");
 		assertDoesNotThrow(() ->{
 			categoryService.create(newCategory);
 		});

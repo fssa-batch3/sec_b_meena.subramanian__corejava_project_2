@@ -125,7 +125,7 @@ public class ProductValidator {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT * FROM products WHERE id = ?";
+			String query = "SELECT id FROM products WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -162,7 +162,7 @@ public class ProductValidator {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT * FROM categories WHERE id = ?";
+			String query = "SELECT id FROM categories WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, categoryId);

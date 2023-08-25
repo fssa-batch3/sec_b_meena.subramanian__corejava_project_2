@@ -19,9 +19,9 @@ public class UserService {
 
 		userValidator.validate(newUser);
 
-		UserDAO userDao = new UserDAO();
+		UserDAO userDAO = new UserDAO();
 
-		userDao.create(newUser);
+		userDAO.create(newUser);
 	}
 
 	/**
@@ -38,9 +38,9 @@ public class UserService {
 		userValidator.validateUser(id);
 		userValidator.validateName(newName);
 
-		UserDAO userDao1 = new UserDAO();
+		UserDAO userDAO1 = new UserDAO();
 
-		userDao1.updateName(id, newName);
+		userDAO1.updateName(id, newName);
 
 	}
 
