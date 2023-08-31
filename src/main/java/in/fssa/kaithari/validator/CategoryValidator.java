@@ -7,58 +7,70 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import in.fssa.kaithari.dao.CategoryDAO;
+import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.Category;
 import in.fssa.kaithari.util.ConnectionUtil;
 
 public class CategoryValidator {
 	/**
+	 * Validates a Category object to ensure it is not null, has a valid ID and a
+	 * unique name.
+	 *
+	 * This method checks the provided Category object to ensure that it is not null
+	 * and its attributes are valid. It verifies that the category ID is
+	 * non-negative and that the category name is unique by querying the data
+	 * source. If any validation check fails, a ValidationException is thrown with
+	 * an appropriate error message.
+	 *
+	 * @param category The Category object to be validated.
+	 * @throws ValidationException If the category is null, has an invalid ID, or a
+	 *                             non-unique name.
 	 * 
-	 * @param category
-	 * @throws ValidationException
 	 */
 	public static void validateCategory(Category category) throws ValidationException {
 
 		if (category == null) {
 			throw new ValidationException("Invalid category input");
 		}
-		if (category.getId() < 0) {
-			throw new ValidationException("Invalid category id");
-		}
-
-		// Business validation
-
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			String query = "SELECT name FROM categories WHERE name = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setString(1, category.getName());
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				throw new ValidationException("Category name already exist");
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-
-		} finally {
-			ConnectionUtil.close(con, ps);
-		}
 
 		validateName(category.getName());
+
+		CategoryDAO categoryDAO = new CategoryDAO();
+
+		Category categoryCall = null;
+
+		try {
+			categoryCall = categoryDAO.findByCategoryName(category.getName());
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ValidationException(e.getMessage());
+		}
+		if (categoryCall != null) {
+			throw new ValidationException("product name already exists");
+		}
+
+	}
+
+	public static void validateCategoryId(int id) throws ValidationException {
+		if (id < 1) {
+			throw new ValidationException("Invalid category id");
+		}
 	}
 
 	/**
-	 * 
-	 * @param Categoryname
-	 * @throws ValidationException
+	 * Validates a category name to ensure it is not null, not empty, and follows a
+	 * specific pattern.
+	 *
+	 * This method checks the provided category name to ensure that it is not null,
+	 * not empty, and follows a specific pattern represented by a regular
+	 * expression. If the name is found to be null, empty, or not matching the
+	 * pattern, a ValidationException is thrown with an appropriate error message.
+	 *
+	 * @param categoryName The category name to be validated.
+	 * @throws ValidationException If the category name is null, empty, or doesn't
+	 *                             match the pattern.
 	 */
 
 	public static void validateName(String Categoryname) throws ValidationException {
@@ -77,9 +89,17 @@ public class CategoryValidator {
 	}
 
 	/**
-	 * 
-	 * @param categoryId
-	 * @throws ValidationException
+	 * Validates a category ID to ensure it is a non-negative value and doesn't
+	 * already exist.
+	 *
+	 * This method checks the provided category ID to ensure that it is a
+	 * non-negative integer and that it does not correspond to an existing category
+	 * in the data source. It queries the data source to find a category with the
+	 * given ID. If the ID is negative or corresponds to an existing category, a
+	 * ValidationException is thrown with an appropriate error message.
+	 *
+	 * @param categoryId The category ID to be validated.
+	 * @throws ValidationException If the category ID is negative or already exists.
 	 */
 	public static void validateId(int categoryId) throws ValidationException {
 
@@ -87,29 +107,44 @@ public class CategoryValidator {
 			throw new ValidationException("Invalid Id");
 		}
 
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		CategoryDAO categoryDAO = new CategoryDAO();
+
+		Category category = null;
+
 		try {
-			String query = "SELECT id FROM categories WHERE id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, categoryId);
-			rs = ps.executeQuery();
-
-			if (!rs.next()) {
-				throw new ValidationException("Category id doesn't exist");
-			}
-
-		} catch (SQLException e) {
-
+			category=new Category();
+			category = categoryDAO.findByCategoryId(categoryId);
+		} catch (PersistenceException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-
-		} finally {
-			ConnectionUtil.close(con, ps);
+			throw new ValidationException(e.getMessage());
 		}
 
+		if (category != null) {
+			throw new ValidationException("id already exists");
+		}
 	}
+
+
+public static void validateUpdateId(int categoryId) throws ValidationException {
+
+	if (categoryId < 0) {
+		throw new ValidationException("Invalid Id");
+	}
+
+	CategoryDAO categoryDAO = new CategoryDAO();
+
+	Category category = null;
+
+	try {
+		category=new Category();
+		category = categoryDAO.findByCategoryId(categoryId);
+	} catch (PersistenceException e) {
+		e.printStackTrace();
+		throw new ValidationException(e.getMessage());
+	}
+
+	if (category == null) {
+		throw new ValidationException("id already not exists");
+	}
+}
 }

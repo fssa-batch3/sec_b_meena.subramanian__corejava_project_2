@@ -10,14 +10,15 @@ import in.fssa.kaithari.service.CategoryService;
 public class TestUpdateCategory {
 	@Test
 	public void testUpdateCategoryName() {
-		
+
 		CategoryService categoryService = new CategoryService();
 
 		Category updateCategory = new Category();
-		updateCategory.setId(2);
+		updateCategory.setId(1);
 		updateCategory.setName("Dhoti");
-		assertDoesNotThrow(() ->{
-			categoryService.updateCategoryName(updateCategory.getId(),updateCategory.getName());
+		assertDoesNotThrow(() -> {
+			categoryService.updateCategoryName(updateCategory.getId(), updateCategory.getName());
 		});
 	}
 }
+

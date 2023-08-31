@@ -11,16 +11,16 @@ public class TestGetAllProducts {
 
 	@Test
 	public void getAllProductsByCategoryId() {
-	    ProductService productService = new ProductService();
-	    Set<Product> products;
-	    try {
-	        products = productService.findProductByCategoryId(1);
-	        System.out.println(products);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+		ProductService productService = new ProductService();
+		Set<Product> products;
+		try {
+			products = productService.findProductByCategoryId(1);
+			System.out.println(products);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Test
 	public void getAll() {
 		ProductService productService = new ProductService();
@@ -28,8 +28,8 @@ public class TestGetAllProducts {
 		try {
 			AllProducts = productService.listAllProduct();
 			System.out.print(AllProducts);
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -9,13 +9,13 @@ import in.fssa.kaithari.service.ProductService;
 
 public class TestDeleteProduct {
 	@Test
-	 void testDeleteProduct() {
-		
+	void testDeleteProduct() {
+
 		ProductService productService = new ProductService();
 
 		Product newProduct = new Product();
-		newProduct.setId(1);
-		assertDoesNotThrow(() ->{
+		newProduct.setId(15);
+		assertDoesNotThrow(() -> {
 			productService.deleteProduct(newProduct.getId());
 		});
 	}

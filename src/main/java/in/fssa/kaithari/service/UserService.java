@@ -2,46 +2,90 @@ package in.fssa.kaithari.service;
 
 import java.util.Set;
 
+
+
 import in.fssa.kaithari.dao.UserDAO;
+import in.fssa.kaithari.exception.PersistenceException;
+import in.fssa.kaithari.exception.ServiceException;
+import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.User;
 import in.fssa.kaithari.validator.UserValidator;
 
 public class UserService {
 	/**
-	 * 
-	 * @param newUser
-	 * @throws Exception
+	 * Creates a new user.
+	 *
+	 * This method creates a new user based on the provided User object. It first
+	 * validates the attributes of the user using the UserValidator.validate method.
+	 * If the validation is successful, the User object is passed to the UserDAO to
+	 * perform the creation operation. If the creation operation is successful, the
+	 * new user is added to the data source. If the creation operation fails, a
+	 * ServiceException is thrown with an appropriate error message. If the
+	 * validation operation throws a ValidationException, it is caught and re-thrown
+	 * as a ServiceException.
+	 *
+	 * @param newUser The User object containing the information of the new user.
+	 * @throws ServiceException    If there is an issue with validation or
+	 *                             persistence during user creation.
+	 * @throws ValidationException If any of the user's attributes fail validation.
 	 */
+	public void create(User newUser) throws ServiceException, ValidationException {
 
-	public void create(User newUser) throws Exception {
-
-		UserValidator userValidator = new UserValidator();
-
-		userValidator.validate(newUser);
+		UserValidator.validate(newUser);
 
 		UserDAO userDAO = new UserDAO();
 
-		userDAO.create(newUser);
+		try {
+			userDAO.create(newUser);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 	/**
-	 * 
-	 * @param id
-	 * @param newName
-	 * @throws Exception
+	 * Updates the name of a user by their ID.
+	 *
+	 * This method updates the name of a user based on the provided user ID and new
+	 * name. It first validates the user ID using the UserValidator.validateUser
+	 * method and the new name using the UserValidator.validateName method. If the
+	 * validation is successful, the user's ID and new name are passed to the
+	 * UserDAO to perform the update operation. If the update operation is
+	 * successful, the user's name is updated in the data source. If the update
+	 * operation fails, a ServiceException is thrown with an appropriate error
+	 * message. If the validation operation throws a ValidationException, it is
+	 * caught and re-thrown as a ServiceException.
+	 *
+	 * @param id      The ID of the user whose name needs to be updated.
+	 * @param newName The new name to be assigned to the user.
+	 * @throws ServiceException    If there is an issue with validation or
+	 *                             persistence during name update.
+	 * @throws ValidationException If the provided user ID or new name fails
+	 *                             validation.
+	 * @throws PersistenceException 
 	 */
 
-	public void updateName(int id, String newName) throws Exception {
+	public void updateName(int id, String newName) throws ServiceException, ValidationException, PersistenceException {
 
-		UserValidator userValidator = new UserValidator();
-
-		userValidator.validateUser(id);
-		userValidator.validateName(newName);
+		UserValidator.validateUser(id);
+		UserValidator.checkUserIdExist(id);
+		UserValidator.validateName(newName);
 
 		UserDAO userDAO1 = new UserDAO();
 
-		userDAO1.updateName(id, newName);
+		try {
+			userDAO1.updateName(id, newName);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
 
 	}
+	
+	
 
 }
+
+
+
+

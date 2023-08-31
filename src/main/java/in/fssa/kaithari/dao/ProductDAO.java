@@ -7,238 +7,352 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import in.fssa.kaithari.exception.PersistenceException;
+import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.interfaces.ProductInterface;
 import in.fssa.kaithari.model.Product;
 import in.fssa.kaithari.util.ConnectionUtil;
 
 public class ProductDAO implements ProductInterface {
-	
+
 	/**
-	 * 
+	 * Creates a new product.
 	 *
-	 * @param 
-	 * @throws 
+	 * This method creates a new product in the data source with the provided
+	 * details. It uses the provided Product object to extract the necessary
+	 * information and inserts the data into the appropriate table in the database.
+	 * If the creation is successful (i.e., a row is affected), a success message is
+	 * printed. If the creation fails, a PersistenceException is thrown with an
+	 * appropriate error message.
+	 *
+	 * @param product The Product object containing the details of the product to be
+	 *                created.
+	 * @throws PersistenceException If an error occurs while persisting the product
+	 *                              data.
 	 */
 	@Override
-	public void create(Product product) {
-		
+	public void create(Product product) throws PersistenceException {
+
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
 			String query = "INSERT INTO products (product_name, category_id, description, price) VALUES (?,?,?,?)";
 			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);  
-			ps.setString(1,product.getName());
+			ps = conn.prepareStatement(query);
+			
+			ps.setString(1, product.getName());
 			ps.setInt(2, product.getCategory_id());
 			ps.setString(3, product.getDescription());
 			ps.setInt(4, product.getPrice());
-			
+
 			int rowCreated = ps.executeUpdate();
-			
-			if(rowCreated > 0) {				
-			System.out.println("Product created Successfully");
+
+			if (rowCreated > 0) {
+				System.out.println("Product created Successfully");
 			}
-			
+
 			else {
-			throw new RuntimeException("Product Creation fails");
+				throw new PersistenceException("Product Creation fails");
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		finally {
+			throw new PersistenceException(e.getMessage());
+		} finally {
 			ConnectionUtil.close(conn, ps);
 		}
 	}
 
 	/**
-	 * 
+	 * Updates an existing product.
 	 *
-	 * @param 
-	 * @throws 
+	 * This method updates the details of an existing product in the data source
+	 * with the provided Product object. It uses the provided Product object to
+	 * extract the necessary information and updates the data in the appropriate
+	 * table in the database. If the update operation is successful (i.e., rows are
+	 * affected), a success message is printed. If the update operation fails, a
+	 * PersistenceException is thrown with an appropriate error message.
+	 *
+	 * @param product The Product object containing the updated details of the
+	 *                product.
+	 * @throws PersistenceException If an error occurs while updating the product
+	 *                              data.
 	 */
 	@Override
-	public void updateProduct(Product product ) {
-		
-		Connection conn = null;
-		PreparedStatement ps = null;
-		
-		try {
-		String query = "UPDATE products SET name = ?, category_id = ?, description = ?, WHERE id = ?";
-		conn = ConnectionUtil.getConnection();
-		ps = conn.prepareStatement(query);
-		ps.setString(1, product.getName());
-		ps.setInt(2, product.getCategory_id());
-		ps.setString(3, product.getDescription());
-		ps.setInt(10, product.getId());
-		
-		
-		int rowsAffected = ps.executeUpdate();
-		
-		if (rowsAffected > 0) {
-		System.out.println("Product updated successfully");
-		} else {
-		System.out.println("product updated fails");
-		}
-		
-		} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println(e.getMessage());
-		throw new RuntimeException(e.getMessage());
-		}
-		finally {
-		ConnectionUtil.close(conn, ps);
-		}
-}
-	/**
-	 * 
-	 *
-	 * @param 
-	 * @throws 
-	 */
+	public void updateProduct(int id, Product product) throws PersistenceException {
 
-	@Override
-	public void updatePrice(int id, int price) {
-		
 		Connection conn = null;
 		PreparedStatement ps = null;
-		
+
+		try {
+			String query = "UPDATE products SET product_name = ?, category_id = ?, description = ?, price=? WHERE id = ?";
+			conn = ConnectionUtil.getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, product.getName());
+			ps.setInt(2, product.getCategory_id());
+			ps.setString(3, product.getDescription());
+			ps.setInt(4, product.getPrice());
+			ps.setInt(5, id);
+
+			int rowsAffected = ps.executeUpdate();
+
+			if (rowsAffected > 0) {
+				System.out.println("Product updated successfully");
+			} else {
+				System.out.println("product updated fails");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(conn, ps);
+		}
+	}
+
+	/**
+	 * Updates the price of a product.
+	 *
+	 * This method updates the price of an existing product in the data source with
+	 * the provided ID. The new price is specified through the `price` parameter. It
+	 * uses the ID to locate the product to update and modifies the price according
+	 * to the new value. If the update operation is successful (i.e., rows are
+	 * affected), a success message is printed. If the update operation fails, a
+	 * PersistenceException is thrown with an appropriate error message.
+	 *
+	 * @param id    The ID of the product to be updated.
+	 * @param price The new price to be assigned to the product.
+	 * @throws PersistenceException If an error occurs while updating the product
+	 *                              price.
+	 */
+	@Override
+	public void updatePrice(int id, int price) throws PersistenceException {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+
 		try {
 			String query = "UPDATE products set price = ? WHERE id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, price);
 			ps.setInt(2, id);
-			
+
 			int rowsAffected = ps.executeUpdate();
-			if(rowsAffected > 0) {
+			if (rowsAffected > 0) {
 				System.out.println("Price updated successfully");
-			}else {
+			} else {
 				System.out.println("price updation fails");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);	
+			throw new PersistenceException(e.getMessage());
 		}
 	}
 
+	public Product productExists(String productname) throws PersistenceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Product product = null;
+
+		try {
+			String query = "SELECT * FROM products WHERE product_name = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setString(1, productname);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				product=new Product();
+				product.setId(rs.getInt("id"));
+				product.setName(rs.getString("product_name"));
+				product.setCategory_id(rs.getInt("category_id"));
+				product.setDescription(rs.getString("description"));
+				product.setPrice(rs.getInt("price"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+
+		} finally {
+			ConnectionUtil.close(con, ps);
+		}
+
+		return product;
+	}
+
 	/**
-	 * 
+	 * Deletes a product.
 	 *
-	 * @param 
-	 * @throws 
+	 * This method deletes a product from the data source with the provided ID. It
+	 * uses the ID to locate the product to be deleted and removes it from the
+	 * appropriate table in the database. If the deletion is successful (i.e., a row
+	 * is affected), a success message is printed. If the deletion fails, a
+	 * PersistenceException is thrown with an appropriate error message.
+	 *
+	 * @param id The ID of the product to be deleted.
+	 * @throws PersistenceException If an error occurs while deleting the product.
 	 */
 	@Override
-	public void deleteProduct(int id) {
-		
+	public void deleteProduct(int id) throws PersistenceException {
+
 		Connection conn = null;
 		PreparedStatement ps = null;
-		
+
 		try {
 			String query = "DELETE FROM products WHERE id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
 			ps.executeUpdate();
-			
+
 			System.out.println("Product deleted Successfully");
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
-		}
-		finally {
+			throw new PersistenceException(e.getMessage());
+		} finally {
 			ConnectionUtil.close(conn, ps);
 		}
 	}
-	
+
 	/**
-	 * 
+	 * Lists all products.
 	 *
-	 * @param 
-	 * @throws 
+	 * This method retrieves all products from the data source and returns them as a
+	 * Set of Product objects. It queries the database to fetch all product details
+	 * and creates Product objects for each product found. These Product objects are
+	 * added to a Set, which is then returned. If an SQLException occurs during the
+	 * database operation, it is caught and handled, and a PersistenceException is
+	 * thrown with an appropriate error message.
+	 *
+	 * @return A Set of all Product objects available in the data source.
+	 * @throws PersistenceException If an error occurs while retrieving the
+	 *                              products.
 	 */
 
 	@Override
-	public Set<Product> listAllProducts() {
+	public Set<Product> listAllProducts() throws PersistenceException {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
-		Set<Product> allProducts = new HashSet<>(); 
-		
+
+		Set<Product> allProducts = new HashSet<>();
+
 		try {
 			String query = "SELECT product_name,id,category_id,description,price FROM products";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt("id"));
 				product.setName(rs.getString("product_name"));
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
-				product.setPrice(rs.getInt("price"));			
+				product.setPrice(rs.getInt("price"));
 				allProducts.add(product);
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		finally {
+			throw new PersistenceException(e.getMessage());
+		} finally {
 			ConnectionUtil.close(conn, ps);
 		}
 		return allProducts;
 	}
 
-	
 	/**
-	 * 
+	 * Lists all products by category ID.
 	 *
-	 * @param 
-	 * @throws 
+	 * This method retrieves all products from the data source that belong to a
+	 * specific category ID. It queries the database to fetch product details for
+	 * the given category ID and creates Product objects for each product found.
+	 * These Product objects are added to a Set, which is then returned. If an
+	 * SQLException occurs during the database operation, it is caught and handled,
+	 * and a PersistenceException is thrown with an appropriate error message.
+	 *
+	 * @param category_id The ID of the category for which to retrieve products.
+	 * @return A Set of Product objects that belong to the specified category.
+	 * @throws PersistenceException If an error occurs while retrieving the products
+	 *                              by category ID.
 	 */
 	@Override
-	public Set<Product> listAllProductsByCategoryId(int category_id) {
-		
+	public Set<Product> listAllProductsByCategoryId(int category_id) throws PersistenceException {
+
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
-		Set<Product> listOfProductsByCategoryId = new HashSet<>(); 
-		
+
+		Set<Product> listOfProductsByCategoryId = new HashSet<>();
+
 		try {
-			String query = "SELECT category_id FROM products WHERE category_id = ?";
+			String query = "SELECT id, product_name, category_id, description, price FROM products WHERE category_id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1,category_id);
+			ps.setInt(1, category_id);
 			rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt("id"));
 				product.setName(rs.getString("product_name"));
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
-				product.setPrice(rs.getInt("price"));	
+				product.setPrice(rs.getInt("price"));
 				listOfProductsByCategoryId.add(product);
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		finally {
+			throw new PersistenceException(e.getMessage());
+		} finally {
 			ConnectionUtil.close(conn, ps);
 		}
 		return listOfProductsByCategoryId;
-		
+
 	}
 
+	public Product findProductById(int id) throws PersistenceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		Product product = null;
+
+		try {
+			String query = "SELECT id,product_name, category_id, description,price  FROM products WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				    product = new Product();
+				    product.setId(rs.getInt("id"));
+				    product.setName(rs.getString("product_name"));
+	                product.setCategory_id(rs.getInt("category_id"));
+	                product.setDescription(rs.getString("description"));
+	                product.setPrice(rs.getInt("price"));
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+
+		} finally {
+			ConnectionUtil.close(con, ps);
+		}
+
+		return product;
+
+	}
 
 }
