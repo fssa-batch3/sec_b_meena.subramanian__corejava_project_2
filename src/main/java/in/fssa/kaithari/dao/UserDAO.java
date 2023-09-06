@@ -139,6 +139,7 @@ public class UserDAO implements UserInterface {
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
+		        user = new User();
 				user.setId(rs.getInt("id"));
 				user.setName(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
@@ -185,13 +186,14 @@ public class UserDAO implements UserInterface {
 
 		try {
 
-			String query = "SELECT email FROM users WHERE is_active=1 AND email=?";
+			String query = "SELECT email,id,name,password FROM users WHERE is_active=1 AND email=?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, email);
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
+				user=new User();
 				user.setId(rs.getInt("id"));
 				user.setName(rs.getString("name"));
 				user.setEmail(rs.getString("email"));

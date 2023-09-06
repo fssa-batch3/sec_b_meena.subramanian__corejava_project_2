@@ -6,6 +6,15 @@ public class Product {
 	private String description;
 	private int price;
 	private int category_id;
+	private int userId;
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
 	public int getId() {
 		return id;

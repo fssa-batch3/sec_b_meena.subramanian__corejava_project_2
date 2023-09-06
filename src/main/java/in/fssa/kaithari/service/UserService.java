@@ -42,6 +42,21 @@ public class UserService {
 			throw new ServiceException(e.getMessage());
 		}
 	}
+	
+	public User findByEmail(String email)throws ServiceException, ValidationException {
+		
+		UserDAO userDAO=new UserDAO();
+		
+		
+		try {
+			return userDAO.findByEmail(email);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+		
+		
+	}
 
 	/**
 	 * Updates the name of a user by their ID.

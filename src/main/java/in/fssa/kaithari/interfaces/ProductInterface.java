@@ -10,5 +10,5 @@ public interface ProductInterface extends ProductBase<Product> {
 	public abstract Set<Product> listAllProducts() throws PersistenceException;
 
 	public abstract Set<Product> listAllProductsByCategoryId(int category_id) throws PersistenceException;
-
+	
 }

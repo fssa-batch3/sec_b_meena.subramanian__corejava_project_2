@@ -14,8 +14,8 @@ public class TestUpdateCategory {
 		CategoryService categoryService = new CategoryService();
 
 		Category updateCategory = new Category();
-		updateCategory.setId(1);
-		updateCategory.setName("Dhoti");
+		updateCategory.setId(2);
+		updateCategory.setName("Saree");
 		assertDoesNotThrow(() -> {
 			categoryService.updateCategoryName(updateCategory.getId(), updateCategory.getName());
 		});

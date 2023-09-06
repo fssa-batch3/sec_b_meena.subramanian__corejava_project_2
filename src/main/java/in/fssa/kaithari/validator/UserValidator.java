@@ -4,6 +4,7 @@ package in.fssa.kaithari.validator;
 //import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import in.fssa.kaithari.dao.UserDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
@@ -147,11 +148,6 @@ public class UserValidator {
 			throw new ValidationException(e.getMessage());
 
 		}
-
-		if (user == null) {
-			throw new ValidationException("user not found");
-		}
-
 	}
 
 	/**

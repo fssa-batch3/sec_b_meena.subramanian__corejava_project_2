@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Set;
 
 import in.fssa.kaithari.exception.PersistenceException;
@@ -89,7 +90,10 @@ public class CategoryDAO implements CategoryInterFace {
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
+		}finally {
+			ConnectionUtil.close(conn, ps);
 		}
+		
 	}
 	
 
@@ -100,10 +104,40 @@ public class CategoryDAO implements CategoryInterFace {
 
 	}
 
-	@Override
-	public Set<Category> listAllCategroyByCategoryId(int categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	
+	public Set<Category> listAllCategroy() throws PersistenceException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Category category = null;
+		
+		Set<Category> listofCategory=new HashSet<>();
+
+		try {
+			String query = "SELECT id,name FROM categories";
+			conn = ConnectionUtil.getConnection();
+			ps = conn.prepareStatement(query);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				category=new Category();
+				category.setId(rs.getInt("id"));
+				category.setName(rs.getString("name"));
+				
+				listofCategory.add(category);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(conn, ps);
+		}
+
+		return listofCategory;
 	}
 
 	/**
@@ -205,6 +239,13 @@ public class CategoryDAO implements CategoryInterFace {
 
 	    return category;
 	}
+
+	@Override
+	public Set<Category> listAllCategroyByCategoryId(int categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

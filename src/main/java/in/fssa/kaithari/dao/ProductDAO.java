@@ -36,7 +36,7 @@ public class ProductDAO implements ProductInterface {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
-			String query = "INSERT INTO products (product_name, category_id, description, price) VALUES (?,?,?,?)";
+			String query = "INSERT INTO products (product_name, category_id, description, price,user_id) VALUES (?,?,?,?,?)";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			
@@ -44,6 +44,7 @@ public class ProductDAO implements ProductInterface {
 			ps.setInt(2, product.getCategory_id());
 			ps.setString(3, product.getDescription());
 			ps.setInt(4, product.getPrice());
+			ps.setInt(5, product.getUserId());
 
 			int rowCreated = ps.executeUpdate();
 
@@ -85,7 +86,7 @@ public class ProductDAO implements ProductInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE products SET product_name = ?, category_id = ?, description = ?, price=? WHERE id = ?";
+			String query = "UPDATE products SET product_name = ?, category_id = ?, description = ?, price=? , user_id=? WHERE id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, product.getName());
@@ -93,6 +94,7 @@ public class ProductDAO implements ProductInterface {
 			ps.setString(3, product.getDescription());
 			ps.setInt(4, product.getPrice());
 			ps.setInt(5, id);
+			ps.setInt(6,product.getUserId());
 
 			int rowsAffected = ps.executeUpdate();
 
@@ -148,6 +150,8 @@ public class ProductDAO implements ProductInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e.getMessage());
+		}finally {
+			ConnectionUtil.close(conn, ps);
 		}
 	}
 
@@ -171,6 +175,7 @@ public class ProductDAO implements ProductInterface {
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));
+				product.setUserId(rs.getInt("user_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -244,7 +249,7 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> allProducts = new HashSet<>();
 
 		try {
-			String query = "SELECT product_name,id,category_id,description,price FROM products";
+			String query = "SELECT product_name,id,category_id,description,price,user_id FROM products";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -256,6 +261,7 @@ public class ProductDAO implements ProductInterface {
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));
+				product.setUserId(rs.getInt("user_id"));
 				allProducts.add(product);
 			}
 		} catch (SQLException e) {
@@ -293,7 +299,7 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> listOfProductsByCategoryId = new HashSet<>();
 
 		try {
-			String query = "SELECT id, product_name, category_id, description, price FROM products WHERE category_id = ?";
+			String query = "SELECT id, product_name, category_id, description, price,user_id FROM products WHERE category_id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, category_id);
@@ -306,6 +312,7 @@ public class ProductDAO implements ProductInterface {
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));
+				product.setUserId(rs.getInt("user_id"));
 				listOfProductsByCategoryId.add(product);
 			}
 		} catch (SQLException e) {
@@ -318,7 +325,19 @@ public class ProductDAO implements ProductInterface {
 		return listOfProductsByCategoryId;
 
 	}
-
+	
+	/**
+	 * Retrieves a product from the database by its unique identifier (ID).
+	 *
+	 * This method establishes a database connection, executes an SQL query to fetch the product
+	 * information based on the provided ID, and constructs a Product object with the retrieved data.
+	 *
+	 * @param id The unique identifier (ID) of the product to retrieve.
+	 * @return A Product object representing the retrieved product from the database, or null if
+	 *         no product with the specified ID is found.
+	 * @throws PersistenceException If an error occurs while performing database operations, a
+	 *         PersistenceException is thrown with an error message.
+	 */
 	public Product findProductById(int id) throws PersistenceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -327,7 +346,7 @@ public class ProductDAO implements ProductInterface {
 		Product product = null;
 
 		try {
-			String query = "SELECT id,product_name, category_id, description,price  FROM products WHERE id = ?";
+			String query = "SELECT id,product_name, category_id, description,price,user_id  FROM products WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
@@ -340,6 +359,7 @@ public class ProductDAO implements ProductInterface {
 	                product.setCategory_id(rs.getInt("category_id"));
 	                product.setDescription(rs.getString("description"));
 	                product.setPrice(rs.getInt("price"));
+	                product.setUserId(rs.getInt("user_id"));
 			}
 		} catch (SQLException e) {
 
@@ -352,6 +372,54 @@ public class ProductDAO implements ProductInterface {
 		}
 
 		return product;
+
+	}
+	
+	/**
+	 * Retrieves a set of products associated with a specific user based on their user ID.
+	 *
+	 * This method establishes a database connection, executes an SQL query to fetch products
+	 * that belong to the specified user, and constructs a set of Product objects with the retrieved data.
+	 *
+	 * @param user_id The unique identifier (ID) of the user for whom to retrieve products.
+	 * @return A Set of Product objects representing the products associated with the specified user,
+	 *         or an empty set if no products are found for the user.
+	 * @throws PersistenceException If an error occurs while performing database operations, a
+	 *         PersistenceException is thrown with an error message.
+	 */
+	public Set<Product> listAllProductsByUserId(int user_id) throws PersistenceException {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		Set<Product> listOfProductsByUserId = new HashSet<>();
+
+		try {
+			String query = "SELECT id, product_name, category_id, description, price,user_id FROM products WHERE user_id = ?";
+			conn = ConnectionUtil.getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, user_id);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Product product = new Product();
+				product.setId(rs.getInt("id"));
+				product.setName(rs.getString("product_name"));
+				product.setUserId(rs.getInt("user_id"));
+				product.setCategory_id(rs.getInt("category_id"));
+				product.setDescription(rs.getString("description"));
+				product.setPrice(rs.getInt("price"));
+				listOfProductsByUserId.add(product);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(conn, ps);
+		}
+		return listOfProductsByUserId;
 
 	}
 

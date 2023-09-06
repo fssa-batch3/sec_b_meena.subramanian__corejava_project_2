@@ -1,5 +1,7 @@
 package in.fssa.kaithari.service;
 
+import java.util.Set;
+
 import com.google.protobuf.ServiceException;
 
 import in.fssa.kaithari.dao.CategoryDAO;
@@ -92,7 +94,6 @@ public class CategoryService {
 	 *                             validation.
 	 */
 	public void updateCategoryName(int id, String newCategoryName) throws ServiceException, ValidationException {
-
 		CategoryValidator.validateUpdateId(id);
 		CategoryValidator.validateName(newCategoryName);
 		CategoryDAO categoryDAO = new CategoryDAO();
@@ -104,5 +105,15 @@ public class CategoryService {
 		}
 
 	}
-
+	
+	public Set<Category> listAllCategroy()throws ServiceException {
+		CategoryDAO categoryDAO=new CategoryDAO();
+		
+		try {
+			return categoryDAO.listAllCategroy();
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+	}
 }
