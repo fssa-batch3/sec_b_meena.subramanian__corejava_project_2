@@ -14,10 +14,11 @@ public class TestDeleteProduct {
 		ProductService productService = new ProductService();
 
 		Product newProduct = new Product();
-		newProduct.setId(15);
+		newProduct.setId(3);
 		assertDoesNotThrow(() -> {
 			productService.deleteProduct(newProduct.getId());
 		});
 	}
 
 }
+

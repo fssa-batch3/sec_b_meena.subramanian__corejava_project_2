@@ -1,5 +1,6 @@
 package in.fssa.kaithari.model;
 
+
 public class User {
 
 	private String name;

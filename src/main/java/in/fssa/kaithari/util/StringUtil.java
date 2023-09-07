@@ -1,7 +1,7 @@
 package in.fssa.kaithari.util;
 
 import in.fssa.kaithari.exception.ValidationException;
-import in.fssa.kaithari.model.User;
+
 
 public class StringUtil {
 	/**

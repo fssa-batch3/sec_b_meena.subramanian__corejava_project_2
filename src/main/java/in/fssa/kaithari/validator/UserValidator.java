@@ -1,14 +1,11 @@
 package in.fssa.kaithari.validator;
 
-//import java.sql.SQLException;
-//import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 import in.fssa.kaithari.dao.UserDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
-//import in.fssa.kaithari.model.KaithariValidatorErrors;
 import in.fssa.kaithari.model.User;
 
 import in.fssa.kaithari.util.StringUtil;
@@ -17,7 +14,7 @@ public class UserValidator {
 
 	private static final String NAME_PATTERN = "^[A-Za-z][A-Za-z\\s]*$";
 	private static final String EMAIL_PATTERN = "^[a-zA-Z0-9]+([a-zA-Z0-9_+\\-\\. ]*[a-zA-Z0-9]+)?@[a-zA-Z0-9]+([a-zA-Z0-9\\-\\.]*[a-zA-Z0-9])?\\.[a-zA-Z]{2,}$";
-	private static final String PASSWORD_PATTERN = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}";
+	private static final String P_PATTERN = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}";
 
 	/**
 	 * Validates a User object to ensure it is not null and its attributes are
@@ -35,7 +32,6 @@ public class UserValidator {
 	 */
 
 	public static void validate(User user) throws ValidationException {
-
 		if (user == null) {
 			throw new ValidationException("invalid user input");
 		}
@@ -70,19 +66,7 @@ public class UserValidator {
 		if (id < 1) {
 			throw new ValidationException("Invalid user id");
 		}
-//		UserDAO userDAO = new UserDAO();
-//		User user = null;
 
-//		try {
-//			user = userDAO.findById(id);
-//		} catch (PersistenceException e) {
-//			e.printStackTrace();
-//			throw new ValidationException(e.getMessage());
-//		}
-//
-//		if (user == null) {
-//			throw new ValidationException("user not exists");
-//		}
 
 	}
 
@@ -174,7 +158,7 @@ public class UserValidator {
 			throw new ValidationException("Password must contain atleast 8 characters");
 		}
 
-		if (!Pattern.matches(PASSWORD_PATTERN, password)) {
+		if (!Pattern.matches(P_PATTERN, password)){
 			throw new ValidationException("Password does not match the pattern");
 		}
 	}

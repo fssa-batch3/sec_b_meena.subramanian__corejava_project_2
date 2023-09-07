@@ -12,6 +12,7 @@ import in.fssa.kaithari.validator.CategoryValidator;
 
 public class CategoryService {
 
+	
 	/**
 	 * Creates a new category.
 	 *
@@ -105,7 +106,7 @@ public class CategoryService {
 		}
 
 	}
-	
+	  
 	public Set<Category> listAllCategroy()throws ServiceException {
 		CategoryDAO categoryDAO=new CategoryDAO();
 		

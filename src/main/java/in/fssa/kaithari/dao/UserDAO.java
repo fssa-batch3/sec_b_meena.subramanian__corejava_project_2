@@ -1,21 +1,12 @@
 package in.fssa.kaithari.dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-//import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-//import java.util.HashSet;
-//import java.util.Set;
-import java.util.List;
-import java.util.Set;
-
 import in.fssa.kaithari.exception.PersistenceException;
-import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.interfaces.UserInterface;
-import in.fssa.kaithari.model.Product;
 import in.fssa.kaithari.model.User;
 import in.fssa.kaithari.util.ConnectionUtil;
 
@@ -55,7 +46,6 @@ public class UserDAO implements UserInterface {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(conn, ps);
@@ -148,8 +138,7 @@ public class UserDAO implements UserInterface {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 
 		} finally {
 			ConnectionUtil.close(con, ps);
@@ -203,7 +192,6 @@ public class UserDAO implements UserInterface {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 
 		} finally {
@@ -216,7 +204,7 @@ public class UserDAO implements UserInterface {
 
 	@Override
 	public void findAllUsers() throws PersistenceException {
-		// TODO Auto-generated method stub
+
 		
 	}
 	
@@ -250,38 +238,6 @@ public class UserDAO implements UserInterface {
 
 }
 	
-//	@Override
-//	public void  findAllUsers(int id) throws PersistenceException {
-//
-//		Connection conn = null;
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//		Set<User> allUsers = new HashSet<>();
-//		try {
-//			String query = "SELECT product_name,id,category_id,description,price FROM products";
-//			conn = ConnectionUtil.getConnection();
-//			ps = conn.prepareStatement(query);
-//			rs = ps.executeQuery();
-//
-//			while (rs.next()) {
-//				User user = new User();
-//				user.setId(rs.getInt("id"));
-//				user.setName(rs.getString("product_name"));
-//				user.setEmail(rs.getString("email"));
-//				user.setPassword(rs.getString("password"));
-//				allUsers.add(user);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			System.out.println(e.getMessage());
-//			throw new PersistenceException(e.getMessage());
-//		} finally {
-//			ConnectionUtil.close(conn, ps);
-//		}
-//		return allUsers;
-//		
-//		
-//	}
 
 
 

@@ -11,3 +11,4 @@ public class KaithariValidatorErrors {
 	public static final String USER_PASSWORD_INVALID_PATTERN = "Password does not match the pattern";
 
 }
+

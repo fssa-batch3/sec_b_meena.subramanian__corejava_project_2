@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConnectionUtil {
 	/**
@@ -27,14 +26,10 @@ public class ConnectionUtil {
 	 */
 	public static Connection getConnection() {
 
-//		Dotenv env = Dotenv.load();
 		String url = System.getenv("DATABASE_HOSTNAME");
 		String userName = System.getenv("DATABASE_USERNAME");
 		String password = System.getenv("DATABASE_PASSWORD");
 
-//		String url = "jdbc:mysql://127.0.0.1:3306/kaithari";
-//		String userName = "root";
-//		String password = "12345678";
 		
 		
 

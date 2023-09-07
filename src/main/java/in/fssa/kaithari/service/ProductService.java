@@ -10,7 +10,6 @@ import in.fssa.kaithari.model.Product;
 import in.fssa.kaithari.validator.ProductValidator;
 
 public class ProductService {
-
 	/**
 	 * Retrieves a set of all products.
 	 *
@@ -97,6 +96,7 @@ public class ProductService {
 	        throw new ServiceException(e.getMessage());
 	    }
 	}
+	
 
 	/**
 	 * Updates the price of a product by its ID.

@@ -1,9 +1,5 @@
 package in.fssa.kaithari.validator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +7,7 @@ import in.fssa.kaithari.dao.CategoryDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.Category;
-import in.fssa.kaithari.util.ConnectionUtil;
+
 
 public class CategoryValidator {
 	/**

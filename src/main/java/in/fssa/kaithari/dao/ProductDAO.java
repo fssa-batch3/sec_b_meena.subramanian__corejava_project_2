@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import in.fssa.kaithari.exception.PersistenceException;
-import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.interfaces.ProductInterface;
 import in.fssa.kaithari.model.Product;
 import in.fssa.kaithari.util.ConnectionUtil;
@@ -93,15 +92,16 @@ public class ProductDAO implements ProductInterface {
 			ps.setInt(2, product.getCategory_id());
 			ps.setString(3, product.getDescription());
 			ps.setInt(4, product.getPrice());
-			ps.setInt(5, id);
-			ps.setInt(6,product.getUserId());
+			ps.setInt(5,product.getUserId());
+			ps.setInt(6, id);
+			
 
 			int rowsAffected = ps.executeUpdate();
 
 			if (rowsAffected > 0) {
 				System.out.println("Product updated successfully");
 			} else {
-				System.out.println("product updated fails");
+				System.out.println("product updated failed");
 			}
 
 		} catch (SQLException e) {
@@ -337,13 +337,14 @@ public class ProductDAO implements ProductInterface {
 	 *         no product with the specified ID is found.
 	 * @throws PersistenceException If an error occurs while performing database operations, a
 	 *         PersistenceException is thrown with an error message.
-	 */
+	*/
 	public Product findProductById(int id) throws PersistenceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		Product product = null;
+		
 
 		try {
 			String query = "SELECT id,product_name, category_id, description,price,user_id  FROM products WHERE id = ?";
@@ -364,11 +365,10 @@ public class ProductDAO implements ProductInterface {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps,rs);
 		}
 
 		return product;

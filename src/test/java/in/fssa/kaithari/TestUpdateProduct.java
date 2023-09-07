@@ -44,16 +44,16 @@ public class TestUpdateProduct {
 
 		ProductService productService = new ProductService();
 		Product updateProduct = new Product();
-		String randomString = generateRandomString(24);
+		String randomString = generateRandomString(5);
 		String randomStringForDescription = generateRandomString(15);
 		
 		updateProduct.setName(randomString);
-		updateProduct.setCategory_id(2);
+		updateProduct.setCategory_id(1);
 		updateProduct.setDescription(randomStringForDescription);
-		updateProduct.setPrice(2990);
+		updateProduct.setPrice(2996);
 		
 		assertDoesNotThrow(() -> {
-			productService.updateProduct(14, updateProduct);
+			productService.updateProduct(2, updateProduct);
 		});
 	}
 

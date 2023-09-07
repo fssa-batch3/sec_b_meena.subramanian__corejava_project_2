@@ -1,11 +1,6 @@
 package in.fssa.kaithari.validator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.regex.Pattern;
 
 import in.fssa.kaithari.dao.CategoryDAO;
@@ -14,7 +9,6 @@ import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.Category;
 import in.fssa.kaithari.model.Product;
-import in.fssa.kaithari.util.ConnectionUtil;
 import in.fssa.kaithari.util.StringUtil;
 
 public class ProductValidator {
@@ -47,12 +41,12 @@ public class ProductValidator {
 			throw new ValidationException(e.getMessage());
 		}
 
+		
 		if (ProductCall != null) {
 			throw new ValidationException("product already exist");
 		}
 
 		// Perform various validation checks on the product attributes
-		//validateProductId1(product.getId());
 		validateName(product.getName());
 		validateDescription(product.getDescription());
 		validatePrice(product.getPrice());

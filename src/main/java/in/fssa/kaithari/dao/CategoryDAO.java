@@ -1,14 +1,13 @@
 package in.fssa.kaithari.dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
 import in.fssa.kaithari.exception.PersistenceException;
-import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.interfaces.CategoryInterFace;
 import in.fssa.kaithari.model.Category;
 import in.fssa.kaithari.util.ConnectionUtil;
@@ -73,7 +72,7 @@ public class CategoryDAO implements CategoryInterFace {
 
 	@Override
 	public void updateName(int id, String categoryName) throws PersistenceException {
-		// TODO Auto-generated method stub
+
 		Connection conn = null;
 		PreparedStatement ps = null;
 
@@ -100,7 +99,7 @@ public class CategoryDAO implements CategoryInterFace {
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+
 
 	}
 
@@ -139,7 +138,7 @@ public class CategoryDAO implements CategoryInterFace {
 
 		return listofCategory;
 	}
-
+  
 	/**
 	 * Finds a category by its ID.
 	 *
@@ -242,7 +241,7 @@ public class CategoryDAO implements CategoryInterFace {
 
 	@Override
 	public Set<Category> listAllCategroyByCategoryId(int categoryId) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
