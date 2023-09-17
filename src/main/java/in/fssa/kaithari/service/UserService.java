@@ -92,6 +92,21 @@ public class UserService {
 
 	}
 	
+public User findById(int id)throws ServiceException, ValidationException {
+		
+		UserDAO userDAO=new UserDAO();
+		
+		
+		try {
+			return userDAO.findById(id);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
+		}
+		
+		
+	}
+	
 	
 
 }

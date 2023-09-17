@@ -122,7 +122,7 @@ public class UserDAO implements UserInterface {
 		User user = null;
 
 		try {
-			String query = "SELECT name  FROM users WHERE is_active=1 AND id = ?";
+			String query = "SELECT name,id,email,password  FROM users WHERE is_active=1 AND id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
@@ -235,6 +235,8 @@ public class UserDAO implements UserInterface {
 				ConnectionUtil.close(con, ps, rs);
 			}
 	}
+	
+	
 
 }
 	

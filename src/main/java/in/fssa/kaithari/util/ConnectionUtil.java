@@ -45,6 +45,8 @@ public class ConnectionUtil {
 		}
 		return connection;
 	}
+	
+	
 
 	/**
 	 * Closes a database connection and a prepared statement.

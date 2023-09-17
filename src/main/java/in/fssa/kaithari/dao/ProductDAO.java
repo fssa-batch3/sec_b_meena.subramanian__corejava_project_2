@@ -35,15 +35,22 @@ public class ProductDAO implements ProductInterface {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
-			String query = "INSERT INTO products (product_name, category_id, description, price,user_id) VALUES (?,?,?,?,?)";
+			String query = "INSERT INTO products (product_name, category_id, description, price, seller_id, jarigai, design, quantity, image, offer, length) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			
-			ps.setString(1, product.getName());
-			ps.setInt(2, product.getCategory_id());
-			ps.setString(3, product.getDescription());
-			ps.setInt(4, product.getPrice());
-			ps.setInt(5, product.getUserId());
+			 ps.setString(1, product.getName());
+		        ps.setInt(2, product.getCategory_id());
+		        ps.setString(3, product.getDescription());
+		        ps.setInt(4, product.getPrice());
+		        ps.setInt(5, product.getSellerId());
+		        ps.setString(6, product.getJarigai());
+		        ps.setString(7, product.getDesignName());
+		        ps.setInt(8, product.getQuantity());
+		        ps.setString(9, product.getImage());
+		        ps.setInt(10, product.getOffers());
+		        ps.setInt(11, product.getLength());
+			
 
 			int rowCreated = ps.executeUpdate();
 
@@ -85,15 +92,21 @@ public class ProductDAO implements ProductInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE products SET product_name = ?, category_id = ?, description = ?, price=? , user_id=? WHERE id = ?";
-			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);
-			ps.setString(1, product.getName());
-			ps.setInt(2, product.getCategory_id());
-			ps.setString(3, product.getDescription());
-			ps.setInt(4, product.getPrice());
-			ps.setInt(5,product.getUserId());
-			ps.setInt(6, id);
+			 String query = "UPDATE products SET product_name = ?, category_id = ?, description = ?, price = ?, seller_id = ?, jarigai = ?, design = ?, quantity = ?, image = ?, offer = ?, length = ? WHERE id = ?";
+		        conn = ConnectionUtil.getConnection();
+		        ps = conn.prepareStatement(query);
+		        ps.setString(1, product.getName());
+		        ps.setInt(2, product.getCategory_id());
+		        ps.setString(3, product.getDescription());
+		        ps.setInt(4, product.getPrice());
+		        ps.setInt(5, product.getSellerId());
+		        ps.setString(6, product.getJarigai());
+		        ps.setString(7, product.getDesignName());
+		        ps.setInt(8, product.getQuantity());
+		        ps.setString(9, product.getImage());
+		        ps.setInt(10, product.getOffers());
+		        ps.setInt(11, product.getLength());
+		        ps.setInt(12, id);
 			
 
 			int rowsAffected = ps.executeUpdate();
@@ -175,7 +188,7 @@ public class ProductDAO implements ProductInterface {
 				product.setCategory_id(rs.getInt("category_id"));
 				product.setDescription(rs.getString("description"));
 				product.setPrice(rs.getInt("price"));
-				product.setUserId(rs.getInt("user_id"));
+				product.setSellerId(rs.getInt("seller_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -249,20 +262,26 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> allProducts = new HashSet<>();
 
 		try {
-			String query = "SELECT product_name,id,category_id,description,price,user_id FROM products";
-			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);
-			rs = ps.executeQuery();
+			String query = "SELECT id, product_name, description, category_id, price, seller_id, jarigai, design, quantity, image, offer, length FROM products";
+	        conn = ConnectionUtil.getConnection();
+	        ps = conn.prepareStatement(query);
+	        rs = ps.executeQuery();
 
-			while (rs.next()) {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("product_name"));
-				product.setCategory_id(rs.getInt("category_id"));
-				product.setDescription(rs.getString("description"));
-				product.setPrice(rs.getInt("price"));
-				product.setUserId(rs.getInt("user_id"));
-				allProducts.add(product);
+	        while (rs.next()) {
+	            Product product = new Product();
+	            product.setId(rs.getInt("id"));
+	            product.setName(rs.getString("product_name"));
+	            product.setCategory_id(rs.getInt("category_id"));
+	            product.setDescription(rs.getString("description"));
+	            product.setPrice(rs.getInt("price"));
+	            product.setSellerId(rs.getInt("seller_id"));
+	            product.setJarigai(rs.getString("jarigai"));
+	            product.setDesignName(rs.getString("design"));
+	            product.setQuantity(rs.getInt("quantity"));
+	            product.setImage(rs.getString("image"));
+	            product.setOffers(rs.getInt("offer"));
+	            product.setLength(rs.getInt("length"));
+	            allProducts.add(product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -299,21 +318,27 @@ public class ProductDAO implements ProductInterface {
 		Set<Product> listOfProductsByCategoryId = new HashSet<>();
 
 		try {
-			String query = "SELECT id, product_name, category_id, description, price,user_id FROM products WHERE category_id = ?";
-			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);
-			ps.setInt(1, category_id);
-			rs = ps.executeQuery();
+			String query = "SELECT id, product_name, description, category_id, price, seller_id, jarigai, design, quantity, image, offer, length FROM products WHERE category_id = ?";
+	        conn = ConnectionUtil.getConnection();
+	        ps = conn.prepareStatement(query);
+	        ps.setInt(1, category_id);
+	        rs = ps.executeQuery();
 
-			while (rs.next()) {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("product_name"));
-				product.setCategory_id(rs.getInt("category_id"));
-				product.setDescription(rs.getString("description"));
-				product.setPrice(rs.getInt("price"));
-				product.setUserId(rs.getInt("user_id"));
-				listOfProductsByCategoryId.add(product);
+	        while (rs.next()) {
+	            Product product = new Product();
+	            product.setId(rs.getInt("id"));
+	            product.setName(rs.getString("product_name"));
+	            product.setDescription(rs.getString("description"));
+	            product.setCategory_id(rs.getInt("category_id"));
+	            product.setPrice(rs.getInt("price"));
+	            product.setSellerId(rs.getInt("seller_id"));
+	            product.setJarigai(rs.getString("jarigai"));
+	            product.setDesignName(rs.getString("design"));
+	            product.setQuantity(rs.getInt("quantity"));
+	            product.setImage(rs.getString("image"));
+	            product.setOffers(rs.getInt("offer"));
+	            product.setLength(rs.getInt("length"));
+	            listOfProductsByCategoryId.add(product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -347,20 +372,26 @@ public class ProductDAO implements ProductInterface {
 		
 
 		try {
-			String query = "SELECT id,product_name, category_id, description,price,user_id  FROM products WHERE id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, id);
-			rs = ps.executeQuery();
+			 String query = "SELECT id, product_name, description, category_id, price, seller_id, jarigai, design, quantity, image, offer, length FROM products WHERE id = ?";
+		        con = ConnectionUtil.getConnection();
+		        ps = con.prepareStatement(query);
+		        ps.setInt(1, id);
+		        rs = ps.executeQuery();
 
-			if (rs.next()) {
-				    product = new Product();
-				    product.setId(rs.getInt("id"));
-				    product.setName(rs.getString("product_name"));
-	                product.setCategory_id(rs.getInt("category_id"));
-	                product.setDescription(rs.getString("description"));
-	                product.setPrice(rs.getInt("price"));
-	                product.setUserId(rs.getInt("user_id"));
+		        if (rs.next()) {
+		            product = new Product();
+		            product.setId(rs.getInt("id"));
+		            product.setName(rs.getString("product_name"));
+		            product.setDescription(rs.getString("description"));
+		            product.setCategory_id(rs.getInt("category_id"));
+		            product.setPrice(rs.getInt("price"));
+		            product.setSellerId(rs.getInt("seller_id"));
+		            product.setJarigai(rs.getString("jarigai"));
+		            product.setDesignName(rs.getString("design"));
+		            product.setQuantity(rs.getInt("quantity"));
+		            product.setImage(rs.getString("image"));
+		            product.setOffers(rs.getInt("offer"));
+		            product.setLength(rs.getInt("length"));
 			}
 		} catch (SQLException e) {
 
@@ -381,36 +412,42 @@ public class ProductDAO implements ProductInterface {
 	 * This method establishes a database connection, executes an SQL query to fetch products
 	 * that belong to the specified user, and constructs a set of Product objects with the retrieved data.
 	 *
-	 * @param user_id The unique identifier (ID) of the user for whom to retrieve products.
+	 * @param seller_id The unique identifier (ID) of the user for whom to retrieve products.
 	 * @return A Set of Product objects representing the products associated with the specified user,
 	 *         or an empty set if no products are found for the user.
 	 * @throws PersistenceException If an error occurs while performing database operations, a
 	 *         PersistenceException is thrown with an error message.
 	 */
-	public Set<Product> listAllProductsByUserId(int user_id) throws PersistenceException {
+	public Set<Product> listAllProductsBySellerId(int seller_id) throws PersistenceException {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		Set<Product> listOfProductsByUserId = new HashSet<>();
+		Set<Product> listOfProductsBySellerId = new HashSet<>();
 
 		try {
-			String query = "SELECT id, product_name, category_id, description, price,user_id FROM products WHERE user_id = ?";
-			conn = ConnectionUtil.getConnection();
-			ps = conn.prepareStatement(query);
-			ps.setInt(1, user_id);
-			rs = ps.executeQuery();
+			String query = "SELECT id, product_name, description, category_id, price, seller_id, jarigai, design, quantity, image, offer, length FROM products WHERE seller_id = ?";
+	        conn = ConnectionUtil.getConnection();
+	        ps = conn.prepareStatement(query);
+	        ps.setInt(1, seller_id);
+	        rs = ps.executeQuery();
 
-			while (rs.next()) {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("product_name"));
-				product.setUserId(rs.getInt("user_id"));
-				product.setCategory_id(rs.getInt("category_id"));
-				product.setDescription(rs.getString("description"));
-				product.setPrice(rs.getInt("price"));
-				listOfProductsByUserId.add(product);
+	        while (rs.next()) {
+	            Product product = new Product();
+	            product.setId(rs.getInt("id"));
+	            product.setName(rs.getString("product_name"));
+	            product.setDescription(rs.getString("description"));
+	            product.setCategory_id(rs.getInt("category_id"));
+	            product.setPrice(rs.getInt("price"));
+	            product.setSellerId(rs.getInt("seller_id"));
+	            product.setJarigai(rs.getString("jarigai"));
+	            product.setDesignName(rs.getString("design"));
+	            product.setQuantity(rs.getInt("quantity"));
+	            product.setImage(rs.getString("image"));
+	            product.setOffers(rs.getInt("offer"));
+	            product.setLength(rs.getInt("length"));
+	            listOfProductsBySellerId.add(product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -419,7 +456,7 @@ public class ProductDAO implements ProductInterface {
 		} finally {
 			ConnectionUtil.close(conn, ps);
 		}
-		return listOfProductsByUserId;
+		return listOfProductsBySellerId;
 
 	}
 

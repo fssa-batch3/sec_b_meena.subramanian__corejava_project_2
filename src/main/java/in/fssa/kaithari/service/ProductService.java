@@ -248,12 +248,12 @@ public class ProductService {
 	}
 	
 	
-	public Set<Product> findProductByUsertId(int user_id) throws ServiceException, ValidationException {
+	public Set<Product> findProductBySellerId(int seller_id) throws ServiceException, ValidationException {
 
 		ProductDAO productDAO = new ProductDAO();
 		Set<Product> products;
 		try {
-			products = productDAO.listAllProductsByUserId(user_id);
+			products = productDAO.listAllProductsBySellerId(seller_id);
 			return products;
 		} catch (PersistenceException e) {
 			e.printStackTrace();
