@@ -247,7 +247,17 @@ public class ProductService {
 
 	}
 	
-	
+	/**
+	 * Find products by seller ID.
+	 *
+	 * This method retrieves a set of products associated with a specific seller based on the provided seller ID.
+	 * It utilises a ProductDAO instance to interact with the data source and retrieve the products.
+	 *
+	 * @param seller_id The ID of the seller for whom products are to be retrieved.
+	 * @return A Set of Product objects representing the products associated with the specified seller.
+	 * @throws ServiceException If an error occurs while retrieving the products or if the input validation fails.
+	 */
+
 	public Set<Product> findProductBySellerId(int seller_id) throws ServiceException, ValidationException {
 
 		ProductDAO productDAO = new ProductDAO();

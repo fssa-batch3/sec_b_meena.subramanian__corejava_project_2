@@ -33,16 +33,22 @@ public class UserDAO implements UserInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO users (name,email,password)values(?,?,?)";
+			String query = "INSERT INTO users (name, email, password, district, pincode, village, mobile_number, address) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, newuser.getName());
 			ps.setString(2, newuser.getEmail());
 			ps.setString(3, newuser.getPassword());
+			ps.setString(4, newuser.getDistrict());
+			ps.setInt(5, newuser.getPincode());
+			ps.setString(6, newuser.getVillage());
+			ps.setLong(7, newuser.getMobileNumber());
+			ps.setString(8, newuser.getAddress());
 
-			ps.executeUpdate();
+      ps.executeUpdate();
 
-			System.out.println("User created Successfully");
+      System.out.println("User created Successfully");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -93,6 +99,42 @@ public class UserDAO implements UserInterface {
 
 	}
 	
+	/**
+	 * 
+	 * @param updatedUser
+	 * @throws PersistenceException
+	 */
+	 public void updateUser(User updatedUser) throws PersistenceException {
+	        Connection conn = null;
+	        PreparedStatement ps = null;
+
+	        try {
+	            String query = "UPDATE users SET name = ?" +
+	                           "district = ?, pincode = ?, village = ?, " +
+	                           "mobile_number = ?, address = ? WHERE id = ? AND is_active = 1";
+	            conn = ConnectionUtil.getConnection();
+	            ps = conn.prepareStatement(query);
+	            ps.setString(1, updatedUser.getName());
+	            ps.setString(4, updatedUser.getDistrict());
+	            ps.setInt(5, updatedUser.getPincode());
+	            ps.setString(6, updatedUser.getVillage());
+	            ps.setLong(7, updatedUser.getMobileNumber());
+	            ps.setString(8, updatedUser.getAddress());
+	            ps.setInt(9, updatedUser.getId());
+
+	            int rowsAffected = ps.executeUpdate();
+	            if (rowsAffected > 0) {
+	                System.out.println("User updated successfully");
+	            } else {
+	                // Handle the case where no rows were updated (user not found or inactive)
+	                System.out.println("No user with the specified ID found or user is not active.");
+	            }
+	        } catch (SQLException e) {
+	            throw new PersistenceException(e.getMessage());
+	        } finally {
+	            ConnectionUtil.close(conn, ps);
+	        }
+	    }
 
 
 	/**
@@ -121,19 +163,24 @@ public class UserDAO implements UserInterface {
 		ResultSet rs = null;
 		User user = null;
 
-		try {
-			String query = "SELECT name,id,email,password  FROM users WHERE is_active=1 AND id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, id);
-			rs = ps.executeQuery();
+		try  {
+	        String query = "SELECT id, name, email, password, district, pincode, village, mobile_number, address FROM users WHERE is_active = 1 AND id = ?";
+	        con = ConnectionUtil.getConnection();
+	        ps = con.prepareStatement(query);
+	        ps.setInt(1, id);
+	        rs = ps.executeQuery();
 
-			if (rs.next()) {
-		        user = new User();
-				user.setId(rs.getInt("id"));
-				user.setName(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
-				user.setPassword(rs.getString("password"));
+	        if (rs.next()) {
+	            user = new User();
+	            user.setId(rs.getInt("id"));
+	            user.setName(rs.getString("name"));
+	            user.setEmail(rs.getString("email"));
+	            user.setPassword(rs.getString("password"));
+	            user.setDistrict(rs.getString("district"));
+	            user.setPincode(rs.getInt("pincode"));
+	            user.setVillage(rs.getString("village"));
+	            user.setMobileNumber(rs.getLong("mobile_number"));
+	            user.setAddress(rs.getString("address"));
 			}
 		} catch (SQLException e) {
 
@@ -174,19 +221,23 @@ public class UserDAO implements UserInterface {
 		User user = null;
 
 		try {
+			String query = "SELECT id, name, email, password, district, pincode, village, mobile_number, address FROM users WHERE is_active = 1 AND email = ?";
+	        con = ConnectionUtil.getConnection();
+	        ps = con.prepareStatement(query);
+	        ps.setString(1, email);
+	        rs = ps.executeQuery();
 
-			String query = "SELECT email,id,name,password FROM users WHERE is_active=1 AND email=?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setString(1, email);
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				user=new User();
-				user.setId(rs.getInt("id"));
-				user.setName(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
-				user.setPassword(rs.getString("password"));
+	        if (rs.next()) {
+	            user = new User();
+	            user.setId(rs.getInt("id"));
+	            user.setName(rs.getString("name"));
+	            user.setEmail(rs.getString("email"));
+	            user.setPassword(rs.getString("password"));
+	            user.setDistrict(rs.getString("district"));
+	            user.setPincode(rs.getInt("pincode"));
+	            user.setVillage(rs.getString("village"));
+	            user.setMobileNumber(rs.getLong("mobile_number"));
+	            user.setAddress(rs.getString("address"));
 			}
 
 		} catch (SQLException e) {
@@ -205,42 +256,47 @@ public class UserDAO implements UserInterface {
 	@Override
 	public void findAllUsers() throws PersistenceException {
 
-		
 	}
-	
-	public void CheckIdExist(int id)throws PersistenceException{
-		
+
+	/**
+	 * Check if a user with the specified ID exists in the data source.
+	 *
+	 * This method queries the data source to determine if a user with the provided
+	 * ID exists. If a matching user is found, the method does nothing. If no
+	 * matching user is found, it throws a PersistenceException with an appropriate
+	 * error message.
+	 *
+	 * @param id The ID of the user to check for existence.
+	 * @throws PersistenceException If the user with the specified ID does not exist
+	 *                              or if an error occurs while checking.
+	 */
+
+	public void CheckIdExist(int id) throws PersistenceException {
+
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 
-			String query ="SELECT name FROM users WHERE id = ?";
+			String query = "SELECT name FROM users WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			if(!rs.next()) {
+			if (!rs.next()) {
 				throw new PersistenceException("user doesn't exists");
-				}
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-				System.out.println(e.getMessage());
-				throw new PersistenceException(e.getMessage());
-
-			}finally {
-
-				ConnectionUtil.close(con, ps, rs);
 			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+
+		} finally {
+
+			ConnectionUtil.close(con, ps, rs);
+		}
 	}
-	
-	
 
 }
-	
-
-
-
-

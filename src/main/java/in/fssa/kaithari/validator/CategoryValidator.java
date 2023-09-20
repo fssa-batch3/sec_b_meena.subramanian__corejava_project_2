@@ -8,7 +8,6 @@ import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.Category;
 
-
 public class CategoryValidator {
 	/**
 	 * Validates a Category object to ensure it is not null, has a valid ID and a
@@ -108,7 +107,7 @@ public class CategoryValidator {
 		Category category = null;
 
 		try {
-			category=new Category();
+			category = new Category();
 			category = categoryDAO.findByCategoryId(categoryId);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -120,27 +119,38 @@ public class CategoryValidator {
 		}
 	}
 
+	/**
+	 * Validate the category ID for an update operation.
+	 *
+	 * This method is responsible for validating a category ID before performing an
+	 * update operation. It checks whether the provided category ID is valid, exists
+	 * in the data source, and is greater than or equal to zero.
+	 *
+	 * @param categoryId The category ID to be validated.
+	 * @throws ValidationException If the provided category ID is not valid, is
+	 *                             negative, or does not exist in the data source.
+	 */
 
-public static void validateUpdateId(int categoryId) throws ValidationException {
+	public static void validateUpdateId(int categoryId) throws ValidationException {
 
-	if (categoryId < 0) {
-		throw new ValidationException("Invalid Id");
+		if (categoryId < 0) {
+			throw new ValidationException("Invalid Id");
+		}
+
+		CategoryDAO categoryDAO = new CategoryDAO();
+
+		Category category = null;
+
+		try {
+			category = new Category();
+			category = categoryDAO.findByCategoryId(categoryId);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ValidationException(e.getMessage());
+		}
+
+		if (category == null) {
+			throw new ValidationException("id already not exists");
+		}
 	}
-
-	CategoryDAO categoryDAO = new CategoryDAO();
-
-	Category category = null;
-
-	try {
-		category=new Category();
-		category = categoryDAO.findByCategoryId(categoryId);
-	} catch (PersistenceException e) {
-		e.printStackTrace();
-		throw new ValidationException(e.getMessage());
-	}
-
-	if (category == null) {
-		throw new ValidationException("id already not exists");
-	}
-}
 }

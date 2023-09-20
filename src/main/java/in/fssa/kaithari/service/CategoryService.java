@@ -12,7 +12,6 @@ import in.fssa.kaithari.validator.CategoryValidator;
 
 public class CategoryService {
 
-	
 	/**
 	 * Creates a new category.
 	 *
@@ -106,10 +105,19 @@ public class CategoryService {
 		}
 
 	}
-	  
-	public Set<Category> listAllCategroy()throws ServiceException {
-		CategoryDAO categoryDAO=new CategoryDAO();
-		
+
+	/**
+	 * Retrieve a set of all categories.
+	 *
+	 * This method retrieves a set of all categories from the data source. It utilises a CategoryDAO instance to interact with the data source.
+	 *
+	 * @return A Set of Category objects representing all available categories.
+	 * @throws ServiceException If an error occurs while retrieving the categories.
+	 */
+
+	public Set<Category> listAllCategroy() throws ServiceException {
+		CategoryDAO categoryDAO = new CategoryDAO();
+
 		try {
 			return categoryDAO.listAllCategroy();
 		} catch (PersistenceException e) {

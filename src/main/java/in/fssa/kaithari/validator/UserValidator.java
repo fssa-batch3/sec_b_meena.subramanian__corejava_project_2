@@ -2,7 +2,6 @@ package in.fssa.kaithari.validator;
 
 import java.util.regex.Pattern;
 
-
 import in.fssa.kaithari.dao.UserDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
@@ -40,9 +39,9 @@ public class UserValidator {
 		StringUtil.rejectIfInvalidString(user.getEmail(), "email");
 		StringUtil.rejectIfInvalidString(user.getPassword(), "password");
 
-		 validateName(user.getName());
-		 validateEmail(user.getEmail());
-		 validatePassword(user.getPassword());
+		validateName(user.getName());
+		validateEmail(user.getEmail());
+		validatePassword(user.getPassword());
 
 	}
 
@@ -66,7 +65,6 @@ public class UserValidator {
 		if (id < 1) {
 			throw new ValidationException("Invalid user id");
 		}
-
 
 	}
 
@@ -94,8 +92,9 @@ public class UserValidator {
 		}
 
 	}
-	public static void checkUserIdExist(int userId)throws ValidationException, PersistenceException{
-		
+
+	public static void checkUserIdExist(int userId) throws ValidationException, PersistenceException {
+
 		UserDAO userDAO = new UserDAO();
 		userDAO.CheckIdExist(userId);
 	}
@@ -153,14 +152,54 @@ public class UserValidator {
 
 	public static void validatePassword(String password) throws ValidationException {
 
-
 		if (password.length() < 8) {
 			throw new ValidationException("Password must contain atleast 8 characters");
 		}
 
-		if (!Pattern.matches(P_PATTERN, password)){
+		if (!Pattern.matches(P_PATTERN, password)) {
 			throw new ValidationException("Password does not match the pattern");
 		}
 	}
 
+	public static void validateAddress(String address) throws ValidationException {
+		if (address == null || address.trim().isEmpty()) {
+			throw new ValidationException("Address cannot be null or empty");
+		}
+	}
+
+	public static void validateDistrict(String district) throws ValidationException {
+		if (district == null || district.trim().isEmpty()) {
+			throw new ValidationException("District cannot be null or empty");
+		}
+		String districtPattern = "^[A-Za-z\\s-]+$"; // Adjust the pattern as needed
+
+		if (!Pattern.matches(districtPattern, district)) {
+			throw new ValidationException("District does not match the expected pattern");
+		}
+	}
+
+	public static void validateMobileNumber(long newMobileNumber) throws ValidationException {
+		long minValidMobileNumber = 1000000000L; // Represents the minimum 10-digit mobile number
+		long maxValidMobileNumber = 9999999999L; // Represents the maximum 10-digit mobile number
+
+		if (newMobileNumber < minValidMobileNumber || newMobileNumber > maxValidMobileNumber) {
+			throw new ValidationException("Mobile number does not match the expected pattern");
+		}
+
+	}
+
+	public static void validatePincode(int pincode) throws ValidationException {
+		if (pincode < 100000 || pincode > 999999) {
+			throw new ValidationException("PIN code does not match the expected pattern");
+		}
+	}
+
+	public static void validateVillage(String village) throws ValidationException {
+		if (village == null || village.trim().isEmpty()) {
+			throw new ValidationException("Village name cannot be null or empty");
+		}
+		if (!village.matches("^[A-Za-z\\s]+$")) {
+			throw new ValidationException("Village name should contain only letters and spaces");
+		}
+	}
 }

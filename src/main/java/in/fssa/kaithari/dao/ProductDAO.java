@@ -167,6 +167,19 @@ public class ProductDAO implements ProductInterface {
 			ConnectionUtil.close(conn, ps);
 		}
 	}
+	
+	/**
+	 * Checks if a product with the given name exists.
+	 *
+	 * This method queries the data source to determine if a product with the specified name exists.
+	 * If a matching product is found, its details are retrieved and used to create a Product object,
+	 * which is then returned. If no matching product is found, null is returned.
+	 *
+	 * @param productname The name of the product to check for existence.
+	 * @return A Product object representing the existing product with the specified name, or null if
+	 *         no matching product is found.
+	 * @throws PersistenceException If an error occurs while checking for the product's existence.
+	 */
 
 	public Product productExists(String productname) throws PersistenceException {
 		Connection con = null;

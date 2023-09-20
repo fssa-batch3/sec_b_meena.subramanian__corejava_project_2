@@ -103,7 +103,16 @@ public class CategoryDAO implements CategoryInterFace {
 
 	}
 
-	
+	/**
+	 * Retrieves a list of all categories.
+	 *
+	 * This method retrieves a list of all categories from the data source, such as a database table,
+	 * and returns them as a Set of Category objects.
+	 *
+	 * @return A Set of Category objects representing all available categories,
+	 *         or an empty Set if no categories are found.
+	 * @throws PersistenceException If an error occurs while retrieving the categories.
+	 */
 	
 	public Set<Category> listAllCategroy() throws PersistenceException {
 		Connection conn = null;
