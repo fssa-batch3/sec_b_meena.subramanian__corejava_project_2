@@ -1,8 +1,6 @@
 package in.fssa.kaithari.model;
 
 public class Seller {
-
-	
 	private String name;
 	private String email;
 	private String password;
@@ -10,6 +8,11 @@ public class Seller {
 	private String idImage;
 	private int id;
 	private boolean isActive;
+	private String district;
+	private int pincode;
+	private String village;
+	private long mobileNumber;
+	private String address;
 	
 	public boolean getisActive() {
 		return isActive;
@@ -53,12 +56,50 @@ public class Seller {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	public String getDistrict() {
+		return district;
+	}
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	public int getPincode() {
+		return pincode;
+	}
+	public void setPincode(int pincode) {
+		this.pincode = pincode;
+	}
+	public String getVillage() {
+		return village;
+	}
+	public void setVillage(String village) {
+		this.village = village;
+	}
+	public long getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(long mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-	
 	@Override
 	public String toString() {
 		return "Seller [name=" + name + ", email=" + email + ", password=" + password + ", proofImage=" + proofImage
-				+ ", idImage=" + idImage + ", id=" + id + ", isActive=" + isActive + "]";
+				+ ", idImage=" + idImage + ", id=" + id + ", isActive=" + isActive + ", district=" + district
+				+ ", pincode=" + pincode + ", village=" + village + ", mobileNumber=" + mobileNumber + ", address="
+				+ address + "]";
 	}
+	
 
 }

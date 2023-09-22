@@ -12,6 +12,8 @@ import in.fssa.kaithari.model.Seller;
 import in.fssa.kaithari.util.ConnectionUtil;
 
 public class SellerDAO {
+	private int sellerId;
+
 	/**
 	 * Creates a new seller in the data source.
 	 *
@@ -29,7 +31,7 @@ public class SellerDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO sellers (name, email, proof_image, id_image, password) VALUES (?, ?, ?, ?, ?)";
+			String query = "INSERT INTO sellers (name, email, proof_image, id_image, password, district, pincode, village, mobile_number, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, newSeller.getName());
@@ -37,6 +39,11 @@ public class SellerDAO {
 			ps.setString(3, newSeller.getProofImage());
 			ps.setString(4, newSeller.getIdImage());
 			ps.setString(5, newSeller.getPassword());
+			ps.setString(6, newSeller.getDistrict());
+			ps.setInt(7, newSeller.getPincode());
+			ps.setString(8, newSeller.getVillage());
+			ps.setLong(9, newSeller.getMobileNumber());
+			ps.setString(10, newSeller.getAddress());
 
 			ps.executeUpdate();
 
@@ -73,7 +80,7 @@ public class SellerDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT * FROM sellers WHERE is_active = true";
+			String query = "SELECT name, email, proof_image, id_image, password, district, pincode, village, mobile_number, address FROM sellers WHERE is_active = true";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -87,6 +94,11 @@ public class SellerDAO {
 				seller.setIdImage(rs.getString("id_image"));
 				seller.setPassword(rs.getString("password"));
 				seller.setisActive(rs.getBoolean("is_active"));
+				seller.setDistrict(rs.getString("district"));
+				seller.setPincode(rs.getInt("pincode"));
+				seller.setVillage(rs.getString("village"));
+				seller.setMobileNumber(rs.getLong("mobile_number"));
+				seller.setAddress(rs.getString("address"));
 
 				sellers.add(seller);
 			}
@@ -119,15 +131,20 @@ public class SellerDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE sellers SET name = ?, email = ?, proof_image = ?, id_image = ?, password = ? WHERE id = ?";
+			String query = "UPDATE sellers SET name = ?, email = ?, password = ?, proof_image = ?, id_image = ?, district = ?, pincode = ?, village = ?, mobile_number = ?, address = ? WHERE id = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, seller.getName());
 			ps.setString(2, seller.getEmail());
-			ps.setString(3, seller.getProofImage());
-			ps.setString(4, seller.getIdImage());
-			ps.setString(5, seller.getPassword());
-			ps.setInt(6, seller.getId());
+			ps.setString(3, seller.getPassword());
+			ps.setString(4, seller.getProofImage());
+			ps.setString(5, seller.getIdImage());
+			ps.setString(6, seller.getDistrict());
+			ps.setInt(7, seller.getPincode());
+			ps.setString(8, seller.getVillage());
+			ps.setLong(9, seller.getMobileNumber());
+			ps.setString(10, seller.getAddress());
+			ps.setInt(11, seller.getId());
 
 			int rowsUpdated = ps.executeUpdate();
 
@@ -180,6 +197,11 @@ public class SellerDAO {
 				seller.setIdImage(rs.getString("id_image"));
 				seller.setPassword(rs.getString("password"));
 				seller.setisActive(rs.getBoolean("is_active"));
+				seller.setDistrict(rs.getString("district"));
+				seller.setPincode(rs.getInt("pincode"));
+				seller.setVillage(rs.getString("village"));
+				seller.setMobileNumber(rs.getLong("mobile_number"));
+				seller.setAddress(rs.getString("address"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -213,7 +235,7 @@ public class SellerDAO {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT * FROM sellers WHERE email = ?";
+			String query = "SELECT id, name, email, password, proof_image, id_image, is_active, district, pincode, village, mobile_number, address FROM sellers WHERE email = ?";
 			conn = ConnectionUtil.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, email);
@@ -228,6 +250,13 @@ public class SellerDAO {
 				seller.setIdImage(rs.getString("id_image"));
 				seller.setPassword(rs.getString("password"));
 				seller.setisActive(rs.getBoolean("is_active"));
+				seller.setDistrict(rs.getString("district"));
+				seller.setPincode(rs.getInt("pincode"));
+				seller.setVillage(rs.getString("village"));
+				seller.setMobileNumber(rs.getLong("mobile_number"));
+				seller.setAddress(rs.getString("address"));
+				
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -272,6 +301,38 @@ public class SellerDAO {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
+		}
+	}
+
+	public void updateAddress(int id, String newName, String newAddress, String newDistrict, long newMobileNumber,
+			int newPincode, String newVillage) throws PersistenceException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			String query = "UPDATE sellers SET name = ?, address = ?, district = ?, mobile_number = ?, pincode = ?, village = ? WHERE id = ?";
+			conn = ConnectionUtil.getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, newName);
+			ps.setString(2, newAddress);
+			ps.setString(3, newDistrict);
+			ps.setLong(4, newMobileNumber);
+			ps.setInt(5, newPincode);
+			ps.setString(6, newVillage);
+			ps.setInt(7, id);
+
+			int rowsUpdated = ps.executeUpdate();
+
+			if (rowsUpdated == 0) {
+				throw new PersistenceException("Seller not found with ID: " + id);
+			}
+
+			System.out.println("Seller address updated Successfully");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(conn, ps);
 		}
 	}
 }

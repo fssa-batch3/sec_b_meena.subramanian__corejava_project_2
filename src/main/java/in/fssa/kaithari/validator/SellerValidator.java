@@ -1,5 +1,7 @@
 package in.fssa.kaithari.validator;
 
+import java.util.regex.Pattern;
+
 import in.fssa.kaithari.dao.SellerDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ValidationException;
@@ -47,7 +49,7 @@ public class SellerValidator {
 	 *                             meet the required format.
 	 */
 
-	private static void validateName(String name) throws ValidationException {
+	public static void validateName(String name) throws ValidationException {
 		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException("Name cannot be empty");
 		}
@@ -135,4 +137,48 @@ public class SellerValidator {
 		SellerDAO sellerDAO = new SellerDAO();
 		sellerDAO.checkSellerIdExist(sellerId);
 	}
+	
+	
+	public static void validateAddress(String address) throws ValidationException {
+		if (address == null || address.trim().isEmpty()) {
+			throw new ValidationException("Address cannot be null or empty");
+		}
+	}
+
+	public static void validateDistrict(String district) throws ValidationException {
+		if (district == null || district.trim().isEmpty()) {
+			throw new ValidationException("District cannot be null or empty");
+		}
+		String districtPattern = "^[A-Za-z\\s-]+$"; // Adjust the pattern as needed
+
+		if (!Pattern.matches(districtPattern, district)) {
+			throw new ValidationException("District does not match the expected pattern");
+		}
+	}
+
+	public static void validateMobileNumber(long newMobileNumber) throws ValidationException {
+		long minValidMobileNumber = 1000000000L; // Represents the minimum 10-digit mobile number
+		long maxValidMobileNumber = 9999999999L; // Represents the maximum 10-digit mobile number
+
+		if (newMobileNumber < minValidMobileNumber || newMobileNumber > maxValidMobileNumber) {
+			throw new ValidationException("Mobile number does not match the expected pattern");
+		}
+
+	}
+
+	public static void validatePincode(int pincode) throws ValidationException {
+		if (pincode < 100000 || pincode > 999999) {
+			throw new ValidationException("PIN code does not match the expected pattern");
+		}
+	}
+
+	public static void validateVillage(String village) throws ValidationException {
+		if (village == null || village.trim().isEmpty()) {
+			throw new ValidationException("Village name cannot be null or empty");
+		}
+		if (!village.matches("^[A-Za-z\\s]+$")) {
+			throw new ValidationException("Village name should contain only letters and spaces");
+		}
+	}
+
 }

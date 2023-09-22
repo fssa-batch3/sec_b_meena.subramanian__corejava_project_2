@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import in.fssa.kaithari.exception.PersistenceException;
@@ -20,7 +22,7 @@ public class OrderDAO {
 
         try {
             conn = ConnectionUtil.getConnection(); // Use your connection utility class to get a connection
-            String query = "INSERT INTO orders (user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO orders (user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             ps = conn.prepareStatement(query);
 
             ps.setInt(1, order.getUserId());
@@ -35,6 +37,7 @@ public class OrderDAO {
             ps.setString(10, order.getDistrict());
             ps.setInt(11, order.getBuyQuantity());
             ps.setInt(12, order.getPincode());
+            ps.setInt(13, order.getPrice());
 
             int rowsInserted = ps.executeUpdate();
             if (rowsInserted > 0) {
@@ -58,7 +61,7 @@ public class OrderDAO {
 	    Order order = null;
 
 	    try {
-	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode FROM orders WHERE id = ?";
+	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode, price FROM orders WHERE id = ?";
 	        con = ConnectionUtil.getConnection();
 	        ps = con.prepareStatement(query);
 	        ps.setInt(1, id);
@@ -79,6 +82,7 @@ public class OrderDAO {
 	            order.setDistrict(rs.getString("district"));
 	            order.setBuyQuantity(rs.getInt("buy_quantity"));
 	            order.setPincode(rs.getInt("pincode"));
+	            order.setPrice(rs.getInt("price"));
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -98,7 +102,7 @@ public class OrderDAO {
 	    Set<Order> orders = new HashSet<>();
 
 	    try {
-	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode FROM orders WHERE user_id = ?";
+	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price FROM orders WHERE user_id = ?";
 	        con = ConnectionUtil.getConnection();
 	        ps = con.prepareStatement(query);
 	        ps.setInt(1, userId);
@@ -119,6 +123,7 @@ public class OrderDAO {
 	            order.setDistrict(rs.getString("district"));
 	            order.setBuyQuantity(rs.getInt("buy_quantity"));
 	            order.setPincode(rs.getInt("pincode"));
+	            order.setPrice(rs.getInt("price"));
 	            
 	            orders.add(order);
 	        }
@@ -133,14 +138,14 @@ public class OrderDAO {
 	}
 
 
-    public Set<Order> findOrderBySellerId(int sellerId) throws PersistenceException {
+    public List<Order> findOrderBySellerId(int sellerId) throws PersistenceException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Set<Order> orders = new HashSet<>();
+        List<Order> orders = new ArrayList<>();
 
         try {
-            String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode FROM orders WHERE seller_id = ?";
+            String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price FROM orders WHERE seller_id = ?";
             con = ConnectionUtil.getConnection();
             ps = con.prepareStatement(query);
             ps.setInt(1, sellerId);
@@ -161,6 +166,7 @@ public class OrderDAO {
                 order.setDistrict(rs.getString("district"));
                 order.setBuyQuantity(rs.getInt("buy_quantity"));
                 order.setPincode(rs.getInt("pincode"));
+                order.setPrice(rs.getInt("price"));
                 
                 orders.add(order);
             }
@@ -181,12 +187,11 @@ public class OrderDAO {
 
         try {
             conn = ConnectionUtil.getConnection(); // Use your connection utility class to get a connection
-            String query = "UPDATE orders SET cancel_order = ? WHERE id = ?";
+            String query = "UPDATE orders SET cancel_order = 1 WHERE id = ?";
             ps = conn.prepareStatement(query);
 
             // Set the cancel_order status to true (1) for the specified orderId
-            ps.setBoolean(1, true);
-            ps.setInt(2, orderId);
+            ps.setInt(1, orderId);
 
             int rowsUpdated = ps.executeUpdate();
 

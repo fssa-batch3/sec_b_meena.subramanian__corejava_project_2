@@ -1,6 +1,7 @@
 package in.fssa.kaithari.service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 import in.fssa.kaithari.dao.OrderDAO;
@@ -43,7 +44,7 @@ public class OrderService {
 	        }
 	    }
 	 
-	 public Set<Order> findOrderBySellerId(int sellerId) throws ServiceException {
+	 public  List<Order> findOrderBySellerId(int sellerId) throws ServiceException {
 		 OrderDAO orderDAO = new OrderDAO();
 	        try {
 	            return orderDAO.findOrderBySellerId(sellerId);

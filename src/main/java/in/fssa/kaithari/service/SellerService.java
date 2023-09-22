@@ -1,11 +1,13 @@
 package in.fssa.kaithari.service;
 
 import in.fssa.kaithari.dao.SellerDAO;
+import in.fssa.kaithari.dao.UserDAO;
 import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.exception.ServiceException;
 import in.fssa.kaithari.exception.ValidationException;
 import in.fssa.kaithari.model.Seller;
 import in.fssa.kaithari.validator.SellerValidator;
+import in.fssa.kaithari.validator.UserValidator;
 
 public class SellerService {
 	/**
@@ -93,15 +95,34 @@ public class SellerService {
 	 * @throws PersistenceException If an error occurs in the data access layer.
 	 */
 
-	public void update(Seller updatedSeller) throws ServiceException, PersistenceException {
-		SellerDAO sellerDAO = new SellerDAO();
+	/*
+	 * public void update(Seller updatedSeller) throws ServiceException,
+	 * PersistenceException { SellerDAO sellerDAO = new SellerDAO();
+	 * 
+	 * try { sellerDAO.updateAddress(updatedSeller); } catch (PersistenceException
+	 * e) { e.printStackTrace(); throw new ServiceException(e.getMessage()); } }
+	 */
+	
+	public void updateAddress(int id, String newName, String newAddress, String newDistrict,
+	        long newMobileNumber, int newPincode, String newVillage)
+	        throws ServiceException, ValidationException, PersistenceException {
+	    SellerValidator.validateSeller(id);
+	    SellerValidator.checkSellerIdExist(id);
+	    SellerValidator.validateName(newName);
+	    SellerValidator.validateAddress(newAddress);
+	    SellerValidator.validateDistrict(newDistrict);
+	    SellerValidator.validateMobileNumber(newMobileNumber);
+	    SellerValidator.validatePincode(newPincode);
+	    SellerValidator.validateVillage(newVillage);
 
-		try {
-			sellerDAO.update(updatedSeller);
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException(e.getMessage());
-		}
+	    SellerDAO sellerDAO = new SellerDAO(); // Corrected variable name
+
+	    try {
+	        sellerDAO.updateAddress(id, newName, newAddress, newDistrict, newMobileNumber, newPincode, newVillage);
+	    } catch (PersistenceException e) {
+	        e.printStackTrace();
+	        throw new ServiceException(e.getMessage());
+	    }
 	}
 
 }

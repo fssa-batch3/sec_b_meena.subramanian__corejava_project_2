@@ -3,7 +3,7 @@ package in.fssa.kaithari.model;
 import java.sql.Timestamp;
 
 public class Order {
-	 	private int id;
+			private int id;
 		private int userId;
 	    private int sellerId;
 	    private int productId;
@@ -16,10 +16,17 @@ public class Order {
 	    private String district;
 	    private int buyQuantity;
 	    private int pincode;
+	    private int price;
 
 	    
     
-    public int getId() {
+    public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -98,11 +105,12 @@ public class Order {
 	public void setBuyQuantity(int buyQuantity) {
 		this.buyQuantity = buyQuantity;
 	}
-	@Override
+ 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", userId=" + userId + ", sellerId=" + sellerId + ", productId=" + productId
 				+ ", orderStatus=" + orderStatus + ", cancelOrder=" + cancelOrder + ", createdAt=" + createdAt
 				+ ", name=" + name + ", address=" + address + ", village=" + village + ", district=" + district
-				+ ", buyQuantity=" + buyQuantity + ", pincode=" + pincode + "]";
+				+ ", buyQuantity=" + buyQuantity + ", pincode=" + pincode + ", price=" + price + "]";
 	}
+
 }
