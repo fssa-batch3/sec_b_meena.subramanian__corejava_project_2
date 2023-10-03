@@ -22,7 +22,7 @@ public class OrderDAO {
 
         try {
             conn = ConnectionUtil.getConnection(); // Use your connection utility class to get a connection
-            String query = "INSERT INTO orders (user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO orders (user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price,mobile_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             ps = conn.prepareStatement(query);
 
             ps.setInt(1, order.getUserId());
@@ -38,6 +38,7 @@ public class OrderDAO {
             ps.setInt(11, order.getBuyQuantity());
             ps.setInt(12, order.getPincode());
             ps.setInt(13, order.getPrice());
+            ps.setLong(14, order.getMobileNumber());
 
             int rowsInserted = ps.executeUpdate();
             if (rowsInserted > 0) {
@@ -61,7 +62,7 @@ public class OrderDAO {
 	    Order order = null;
 
 	    try {
-	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode, price FROM orders WHERE id = ?";
+	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode, price,mobile_number FROM orders WHERE id = ?";
 	        con = ConnectionUtil.getConnection();
 	        ps = con.prepareStatement(query);
 	        ps.setInt(1, id);
@@ -83,6 +84,7 @@ public class OrderDAO {
 	            order.setBuyQuantity(rs.getInt("buy_quantity"));
 	            order.setPincode(rs.getInt("pincode"));
 	            order.setPrice(rs.getInt("price"));
+	            order.setMobileNumber(rs.getLong("mobile_number"));
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -102,7 +104,7 @@ public class OrderDAO {
 	    Set<Order> orders = new HashSet<>();
 
 	    try {
-	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price FROM orders WHERE user_id = ?";
+	        String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price,mobile_number FROM orders WHERE user_id = ?";
 	        con = ConnectionUtil.getConnection();
 	        ps = con.prepareStatement(query);
 	        ps.setInt(1, userId);
@@ -124,6 +126,7 @@ public class OrderDAO {
 	            order.setBuyQuantity(rs.getInt("buy_quantity"));
 	            order.setPincode(rs.getInt("pincode"));
 	            order.setPrice(rs.getInt("price"));
+	            order.setMobileNumber(rs.getLong("mobile_number"));
 	            
 	            orders.add(order);
 	        }
@@ -145,7 +148,7 @@ public class OrderDAO {
         List<Order> orders = new ArrayList<>();
 
         try {
-            String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price FROM orders WHERE seller_id = ?";
+            String query = "SELECT id, user_id, seller_id, product_id, order_status, cancel_order, created_at, name, address, village, district, buy_quantity, pincode,price,mobile_number FROM orders WHERE seller_id = ?";
             con = ConnectionUtil.getConnection();
             ps = con.prepareStatement(query);
             ps.setInt(1, sellerId);
@@ -167,7 +170,7 @@ public class OrderDAO {
                 order.setBuyQuantity(rs.getInt("buy_quantity"));
                 order.setPincode(rs.getInt("pincode"));
                 order.setPrice(rs.getInt("price"));
-                
+                order.setMobileNumber(rs.getLong("mobile_number"));
                 orders.add(order);
             }
         } catch (SQLException e) {

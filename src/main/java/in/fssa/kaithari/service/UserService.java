@@ -99,9 +99,9 @@ public class UserService {
 	    UserValidator.validateName(newName);
 	    UserValidator.validateAddress(newAddress);
 	    UserValidator.validateDistrict(newDistrict);
-	    UserValidator.validateMobileNumber(newMobileNumber);
 	    UserValidator.validatePincode(newPincode);
 	    UserValidator.validateVillage(newVillage);
+	    UserValidator.validateMobileNumber(newMobileNumber);
 
 		UserDAO userDAO1 = new UserDAO();
 
@@ -129,7 +129,6 @@ public class UserService {
 	 * @throws ValidationException If the provided user ID is not valid or if other
 	 *                             input validation checks fail.
 	 */
-
 	public  User findById(int id) throws ServiceException, ValidationException {
 
 		UserDAO userDAO = new UserDAO();

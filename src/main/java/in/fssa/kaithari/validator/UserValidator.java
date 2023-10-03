@@ -90,9 +90,15 @@ public class UserValidator {
 		if (!Pattern.matches(NAME_PATTERN, name)) {
 			throw new ValidationException("Name does not match the pattern");
 		}
-
+       if(name == null  ) {
+    	  throw new ValidationException("Name does not be empty");
+      }
+       if(name.trim().isEmpty()){
+    	   throw new ValidationException("Name can not be empty");
+       }
 	}
 
+	
 	public static void checkUserIdExist(int userId) throws ValidationException, PersistenceException {
 
 		UserDAO userDAO = new UserDAO();
@@ -102,7 +108,6 @@ public class UserValidator {
 	/**
 	 * Validates an email address to ensure it is not null, not empty, matches a
 	 * specific pattern, and corresponds to an existing user.
-	 *
 	 * This method checks the provided email address to ensure that it is not null,
 	 * not empty, matches a specific pattern represented by a regular expression,
 	 * and corresponds to an existing user in the data source. It uses a utility
@@ -114,12 +119,16 @@ public class UserValidator {
 	 * @throws ValidationException If the email is null, empty, doesn't match the
 	 *                             pattern, or the user does not exist.
 	 */
+	
 	public static void validateEmail(String email) throws ValidationException {
 
 		StringUtil.rejectIfInvalidString(email, "Email");
 
 		if (!Pattern.matches(EMAIL_PATTERN, email)) {
 			throw new ValidationException("Email does not match the pattern");
+		}
+		if(email.toUpperCase().equals(email)) {
+			throw new ValidationException("Email must be in lower case");
 		}
 		UserDAO userDAO = new UserDAO();
 		User user = new User();
@@ -178,21 +187,49 @@ public class UserValidator {
 		}
 	}
 
-	public static void validateMobileNumber(long newMobileNumber) throws ValidationException {
-		long minValidMobileNumber = 1000000000L; // Represents the minimum 10-digit mobile number
-		long maxValidMobileNumber = 9999999999L; // Represents the maximum 10-digit mobile number
-
-		if (newMobileNumber < minValidMobileNumber || newMobileNumber > maxValidMobileNumber) {
-			throw new ValidationException("Mobile number does not match the expected pattern");
+	/*
+	 * public static void validateMobileNumber(long newMobileNumber) throws
+	 * ValidationException { long minValidMobileNumber = 1000000000L; // Represents
+	 * the minimum 10-digit mobile number long maxValidMobileNumber = 9999999999L;
+	 * // Represents the maximum 10-digit mobile number
+	 * 
+	 * if (newMobileNumber < minValidMobileNumber || newMobileNumber >
+	 * maxValidMobileNumber) { throw new
+	 * ValidationException("Mobile number does not match the expected pattern"); }
+	 * 
+	 * }
+	 */
+	
+	public static void validateMobileNumber(long newMobileNumber) throws ValidationException{
+		
+		String phno = String.valueOf(newMobileNumber);
+		
+		if(phno.length()!=10) {
+			throw new ValidationException("Invalid phone number");
+		}
+		
+		if(newMobileNumber <= 6000000000l || newMobileNumber >= 9999999999l) {
+			throw new ValidationException("Invalid phone number");
 		}
 
 	}
 
+	/*
+	 * public static void validatePincode(int pincode) throws ValidationException {
+	 * if (pincode < 100000 || pincode > 999999) { throw new
+	 * ValidationException("PIN code does not match the expected pattern"); } }
+	 */
 	public static void validatePincode(int pincode) throws ValidationException {
-		if (pincode < 100000 || pincode > 999999) {
-			throw new ValidationException("PIN code does not match the expected pattern");
-		}
+	    String pincodeStr = String.valueOf(pincode);
+	    String regex = "\\d{6}";
+	    if (!pincodeStr.matches(regex) || pincodeStr.length() != 6) {
+	        throw new ValidationException("PIN code should be exactly 6 digits and contain only numbers");
+	    }
+	    if (pincodeStr.trim().isEmpty()) {
+	        throw new ValidationException("Pincode cannot be empty");
+	    }
 	}
+
 
 	public static void validateVillage(String village) throws ValidationException {
 		if (village == null || village.trim().isEmpty()) {

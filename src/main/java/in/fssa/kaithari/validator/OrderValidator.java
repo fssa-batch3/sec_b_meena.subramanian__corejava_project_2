@@ -14,13 +14,14 @@ public class OrderValidator {
         validateUserId(order.getUserId());
         validateSellerId(order.getSellerId());
         validateProductId(order.getProductId());
-        validateCreatedAt(order.getCreatedAt());
+//        validateCreatedAt(order.getCreatedAt());
         validateName(order.getName());
         validateAddress(order.getAddress());
         validateVillage(order.getVillage());
         validateDistrict(order.getDistrict());
         validateBuyQuantity(order.getBuyQuantity());
         validatePincode(order.getPincode());
+        validateMobileNumber(order.getMobileNumber());
        
     }
 
@@ -47,12 +48,12 @@ public class OrderValidator {
 
 
 
-    private static void validateCreatedAt(Timestamp createdAt) throws ValidationException {
-        if (createdAt == null) {
-            throw new ValidationException("Creation date is required");
-        }
-       
-    }
+//    private static void validateCreatedAt(Timestamp createdAt) throws ValidationException {
+//        if (createdAt == null) {
+//            throw new ValidationException("Creation date is required");
+//        }
+//       
+//    }
 
     private static void validateName(String name) throws ValidationException {
         if (name == null || name.trim().isEmpty()) {
@@ -96,5 +97,19 @@ public class OrderValidator {
     	    }
 
     }
+    
+    private static void validateMobileNumber(long newMobileNumber) throws ValidationException{
+		
+		String phno = String.valueOf(newMobileNumber);
+		
+		if(phno.length()!=10) {
+			throw new ValidationException("Invalid phone number");
+		}
+		
+		if(newMobileNumber <= 6000000000l || newMobileNumber >= 9999999999l) {
+			throw new ValidationException("Invalid phone number");
+		}
+
+	}
 
 }
