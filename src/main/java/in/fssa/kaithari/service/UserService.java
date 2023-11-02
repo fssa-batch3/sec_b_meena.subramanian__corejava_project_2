@@ -104,9 +104,18 @@ public class UserService {
 	    UserValidator.validateMobileNumber(newMobileNumber);
 
 		UserDAO userDAO1 = new UserDAO();
+		
+		User user = new User();
+		user.setId(id);
+		user.setName(newName);
+		user.setAddress(newAddress);
+		user.setDistrict(newDistrict);
+		user.setPincode(newPincode);
+		user.setVillage(newVillage);
+		user.setMobileNumber(newMobileNumber);
 
 		try {
-			userDAO1.updateName(id, newName);
+			userDAO1.updateUser(user);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());

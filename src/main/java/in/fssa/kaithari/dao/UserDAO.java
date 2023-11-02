@@ -9,6 +9,7 @@ import in.fssa.kaithari.exception.PersistenceException;
 import in.fssa.kaithari.interfaces.UserInterface;
 import in.fssa.kaithari.model.User;
 import in.fssa.kaithari.util.ConnectionUtil;
+import in.fssa.kaithari.util.PasswordUtil;
 
 public class UserDAO implements UserInterface {
 	/**
@@ -39,7 +40,8 @@ public class UserDAO implements UserInterface {
 			ps = conn.prepareStatement(query);
 			ps.setString(1, newuser.getName());
 			ps.setString(2, newuser.getEmail());
-			ps.setString(3, newuser.getPassword());
+			String hashPassword = PasswordUtil.encryptPassword(newuser.getPassword());
+			ps.setString(3, hashPassword);
 			ps.setString(4, newuser.getDistrict());
 			ps.setInt(5, newuser.getPincode());
 			ps.setString(6, newuser.getVillage());
@@ -109,18 +111,16 @@ public class UserDAO implements UserInterface {
 	        PreparedStatement ps = null;
 
 	        try {
-	            String query = "UPDATE users SET name = ?" +
-	                           "district = ?, pincode = ?, village = ?, " +
-	                           "mobile_number = ?, address = ? WHERE id = ? AND is_active = 1";
+	            String query = "UPDATE users SET name = ?, district = ?, pincode = ?, village = ?, mobile_number = ?, address = ? WHERE id = ? AND is_active = 1";
 	            conn = ConnectionUtil.getConnection();
 	            ps = conn.prepareStatement(query);
 	            ps.setString(1, updatedUser.getName());
-	            ps.setString(4, updatedUser.getDistrict());
-	            ps.setInt(5, updatedUser.getPincode());
-	            ps.setString(6, updatedUser.getVillage());
-	            ps.setLong(7, updatedUser.getMobileNumber());
-	            ps.setString(8, updatedUser.getAddress());
-	            ps.setInt(9, updatedUser.getId());
+	            ps.setString(2, updatedUser.getDistrict());
+	            ps.setInt(3, updatedUser.getPincode());
+	            ps.setString(4, updatedUser.getVillage());
+	            ps.setLong(5, updatedUser.getMobileNumber());
+	            ps.setString(6, updatedUser.getAddress()); 
+	            ps.setInt(7, updatedUser.getId());
 
 	            int rowsAffected = ps.executeUpdate();
 	            if (rowsAffected > 0) {

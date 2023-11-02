@@ -23,7 +23,7 @@ public class OrderService {
 				e.printStackTrace();
 			}
 	    }
-	 
+	  
 	 public Order findById(int id) throws ServiceException {
 		 OrderDAO orderDAO = new OrderDAO();
 	        try {

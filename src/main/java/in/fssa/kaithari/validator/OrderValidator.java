@@ -24,7 +24,7 @@ public class OrderValidator {
         validateMobileNumber(order.getMobileNumber());
        
     }
-
+ 
     private static void validateUserId(int userId) throws ValidationException {
         if (userId <= 0) {
             throw new ValidationException("User ID must be greater than zero");
