@@ -114,8 +114,8 @@ public class CategoryValidator {
 			throw new ValidationException(e.getMessage());
 		}
 
-		if (category != null) {
-			throw new ValidationException("id already exists");
+		if (category == null) {
+			throw new ValidationException("category not exists");
 		}
 	}
 

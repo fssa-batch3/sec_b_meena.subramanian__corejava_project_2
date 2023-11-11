@@ -12,11 +12,11 @@ public class TestUpdateSeller {
         SellerService sellerService = new SellerService();
 
         int id = 3;
-        String newName = "New Seller Name";
-        String newAddress = "New Address";
-        String newDistrict = "New District";
+        String newName = "NewSellerName";
+        String newAddress = "NewAddress";
+        String newDistrict = "NewDistrict";
         long newMobileNumber = 1234567890L;
-        int newPincode = 12345; 
+        int newPincode = 609202; 
         String newVillage = "New Village";
 
         assertDoesNotThrow(() -> {

@@ -27,6 +27,7 @@ public class SellerValidator {
 		}
 
 		StringUtil.rejectIfInvalidString(seller.getName(), "Name");
+		
 		StringUtil.rejectIfInvalidString(seller.getEmail(), "Email");
 		StringUtil.rejectIfInvalidString(seller.getProofImage(), "Proof Image");
 		StringUtil.rejectIfInvalidString(seller.getIdImage(), "ID Image");

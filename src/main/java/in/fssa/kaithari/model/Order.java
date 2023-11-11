@@ -147,6 +147,6 @@ public class Order {
 				+ ", name=" + name + ", address=" + address + ", village=" + village + ", district=" + district
 				+ ", buyQuantity=" + buyQuantity + ", pincode=" + pincode + ", price=" + price + ", mobileNumber="
 				+ mobileNumber + "]";
-	}
+	} 
 
 }

@@ -48,12 +48,12 @@ public class TestUpdateProduct {
 		String randomStringForDescription = generateRandomString(15);
 		
 		updateProduct.setName(randomString);
-		updateProduct.setCategory_id(1);
+		updateProduct.setCategory_id(15);
 		updateProduct.setDescription(randomStringForDescription);
 		updateProduct.setPrice(2996);
 		
 		assertDoesNotThrow(() -> {
-			productService.updateProduct(2, updateProduct);
+			productService.updateProduct(42, updateProduct);
 		});
 	}
 

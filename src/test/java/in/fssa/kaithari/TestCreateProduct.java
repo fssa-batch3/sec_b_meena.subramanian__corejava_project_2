@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +39,7 @@ public class TestCreateProduct {
 		Product product = new Product();
 		String randomString = generateRandomString(5);
 		product.setName(randomString);
-		product.setCategory_id(2);
+		product.setCategory_id(8);
 		product.setDescription("Given an array of n");
 		product.setPrice(3000);
 		assertDoesNotThrow(() -> {
@@ -160,4 +162,55 @@ public class TestCreateProduct {
 		System.out.println(actualMessage);
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
+	
+	@Test
+	void findListAllProduct() {
+
+		ProductService productService = new ProductService();
+
+		assertDoesNotThrow(() -> {
+			Set<Product> list=productService.listAllProduct();
+		});
+	}
+	
+	@Test
+	void findListAllProductBycategeryId() {
+
+		ProductService productService = new ProductService();
+
+		assertDoesNotThrow(() -> {
+			Set<Product> list=productService.findProductByCategoryId(7);
+		});
+	}
+	
+	@Test
+	void findProductById() {
+
+		ProductService productService = new ProductService();
+
+		assertDoesNotThrow(() -> {
+			Product list=productService.findProductById(43);
+		});
+	}
+	
+	@Test
+	void findUpdateProductPrice() {
+
+		ProductService productService = new ProductService();
+
+		assertDoesNotThrow(() -> {
+		    productService.updateProductPrice(43, 3000);
+		});
+	}
+	
+	@Test
+	void findProductBySellerId() {
+
+		ProductService productService = new ProductService();
+
+		assertDoesNotThrow(() -> {
+			Set<Product> list=productService.findProductBySellerId(12);
+		});
+	}
+	
 }

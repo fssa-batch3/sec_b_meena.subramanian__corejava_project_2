@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import in.fssa.kaithari.exception.ValidationException;
 //import in.fssa.kaithari.model.KaithariValidatorErrors;
 import in.fssa.kaithari.model.User;
+import in.fssa.kaithari.service.ProductService;
 import in.fssa.kaithari.service.UserService;
 
 public class TestCreateUser {
@@ -246,4 +247,33 @@ public class TestCreateUser {
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
 
+	@Test
+	void findByEmail() {
+
+		UserService userService = new UserService();
+
+		assertDoesNotThrow(() -> {
+		    User user = userService.findByEmail("ajun@gmaill.com");
+		});
+	}
+	
+	@Test
+	void findByUpdateAddress() {
+
+		UserService userService = new UserService();
+
+		assertDoesNotThrow(() -> {
+	 userService.updateAddress(14, "Meena", "65/98,madam Street.", "Tirunelveli",8695703584L, 627426, "Veeravanallur");
+		});
+	}
+	
+	@Test
+	void findById() {
+
+		UserService userService = new UserService();
+
+		assertDoesNotThrow(() -> {
+		    User user = userService.findById(14);
+		});
+	}
 }

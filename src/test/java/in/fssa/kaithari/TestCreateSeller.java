@@ -120,7 +120,7 @@ public class TestCreateSeller {
 	        sellerService.create(newSeller);
 	    });
 	    
-	    String expectedMessage = "Email does not match the pattern";
+	    String expectedMessage = "Invalid email format";
 	    String actualMessage = exception.getMessage();
 	    System.out.println(actualMessage);
 	    assertTrue(expectedMessage.equals(actualMessage));
@@ -187,7 +187,7 @@ public class TestCreateSeller {
 	        sellerService.create(newSeller);
 	    });
 	    
-	    String expectedMessage = "Name does not match the pattern";
+	    String expectedMessage = "Invalid Name format";
 	    String actualMessage = exception.getMessage();
 	    System.out.println(actualMessage);
 	    assertTrue(expectedMessage.equals(actualMessage));
@@ -255,7 +255,7 @@ public class TestCreateSeller {
 	        sellerService.create(newSeller);
 	    });
 
-	    String expectedMessage = "Password does not match the pattern";
+	    String expectedMessage = "Invalid Password format";
 	    String actualMessage = exception.getMessage();
 	    System.out.println(actualMessage);
 	    assertTrue(expectedMessage.equals(actualMessage));
